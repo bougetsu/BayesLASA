@@ -91,3 +91,5 @@ L_ppm = which(diff(c(z_ppm[n], z_ppm)) != 0)
 
 
 ```
+
+![](figs/deer_application.pdf)
