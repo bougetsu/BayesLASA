@@ -1,5 +1,21 @@
 
 # ========================================================================================
+# generate random initial gamma for MCMC algorithm
+# Inputs
+#  n: total number of vertices in original polygon chain
+#  k: pre-defiend number of landmark points
+# Outputs
+#  gamma: binary vector, gamma[i] = 1 indicates vertix[i] is a landmark point while 0 means not.
+# ========================================================================================
+
+generate_gamma <- function(n, k){
+  gamma = rep(0, n)
+  idx = sample(1:n, k)
+  gamma[idx] = 1
+  return(gamma)
+}
+
+# ========================================================================================
 # get the point-wise distance from reduced polygon to original polygon
 # Inputs
 #  pc: original polygon chain with n 2-dimensional vertices
