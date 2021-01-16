@@ -91,5 +91,4 @@ L_ppm = which(diff(c(z_ppm[n], z_ppm)) != 0)
 
 
 ```
-
-<embed src="figs/deer_application.pdf" type="application/pdf">
+![Application case of complex shape (deer)](figs/deer_application.png)
