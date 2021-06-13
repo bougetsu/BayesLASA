@@ -1,6 +1,6 @@
 # BayesLASA
 
-We propsed a framework called Bayesian Landmark-based Shape Analysis (BayesLASA) for landmark detection in polygonal chain data.
+We proposed a framework called Bayesian Landmark-based Shape Analysis (BayesLASA) for landmark detection in polygonal chain data.
 
 
 #### Landmark identification
