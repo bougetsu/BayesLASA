@@ -1,5 +1,25 @@
 
 # ========================================================================================
+# find the closest point for a given location on a curve
+# Inputs
+#  pos: position on curve [0, 1]
+#  n: total number of vertices in original polygon chain
+# Outputs
+#  cp: number of vertice to the given position
+# ========================================================================================
+
+close_point = Vectorize(function(pos, n){
+  cp = pos*n+1
+  if(cp%%1 >= 0.5){
+    cp = ceiling(cp)
+  }else{
+    cp =  floor(cp)
+  }
+  if(cp >n) cp = cp-n
+  return(cp)
+})
+
+# ========================================================================================
 # generate random initial gamma for MCMC algorithm
 # Inputs
 #  n: total number of vertices in original polygon chain
