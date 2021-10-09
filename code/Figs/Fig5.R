@@ -100,7 +100,6 @@ landmarks$beta_sigma = factor(landmarks$beta_sigma, levels = rev(c(1e-05, 1e-04,
 
 landmark_ppm = subset(landmarks, cmethod == "BayesLASA (PPM)")
 
-
 p_ppm = ggscatter(landmark_ppm, x = "x", y = "y", color = "#FC4E07", size = 2, shape = 15)+
   geom_polygon(data = as.data.frame(pc), aes(x = x, y = y), fill = NA, linetype = "solid",
                size = 0.5, color = "black") +

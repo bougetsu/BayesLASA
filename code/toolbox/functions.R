@@ -1,4 +1,3 @@
-
 # ========================================================================================
 # find the closest point for a given location on a curve
 # Inputs
