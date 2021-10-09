@@ -1,7 +1,6 @@
 //////////////
 //MCMC
 //Cong Zhang
-//Mar 06, 2020
 //MCMC for shape analysis
 //usage: MCMC_shape(NumericMatrix dat, int iter, int estK = 4, Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
 //                      NumericVector updateGp = NumericVector::create(0.8, 0.1, 0.1),
@@ -479,7 +478,7 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
   //hyper-parameter 
   double alpha_w = 2.0*estK/(n-1.0);
   double beta_w = 2.0 - alpha_w;
-
+  
   
   
   //Initialize gamma
@@ -519,9 +518,9 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
   
   //hyper-parameter terms
   double log_K_term = alpha_sigma*log(beta_sigma) - lgamma(alpha_sigma);
-  double Log_Gamma_term = LogOmegaterm(n, K_0, alpha_w, beta_w);
-  //double Log_Gabw_gamma1_term = lgamma(alpha_w +1) + lgamma(beta_w +1 -1);
-  //double Log_Gabw_gamma0_term = lgamma(alpha_w +0) + lgamma(beta_w +1 -0);
+  //double Log_Gamma_term = LogOmegaterm(n, K_0, alpha_w, beta_w);
+  double Log_Gabw_gamma1_term = lgamma(alpha_w +1) + lgamma(beta_w +1 -1);
+  double Log_Gabw_gamma0_term = lgamma(alpha_w +0) + lgamma(beta_w +1 -0);
   
   //get segment
   IntegerMatrix df_0 = gamma2seg(gamma_0, open = open);
@@ -530,8 +529,8 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
     df_0_terms[i] = computeSegLogTerm(df_0(i,0), df_0(i,1), dat, alpha_sigma, beta_sigma, kernel);
   }
   
-  //double post_0 = K_0*log_K_term + sum(df_0_terms) +(K_0)*Log_Gabw_gamma1_term + (n-K_0)*Log_Gabw_gamma0_term;
-  double post_0 = K_0*log_K_term + sum(df_0_terms) +Log_Gamma_term;
+  double post_0 = K_0*log_K_term + sum(df_0_terms) +(K_0)*Log_Gabw_gamma1_term + (n-K_0)*Log_Gabw_gamma0_term;
+  //double post_0 = K_0*log_K_term + sum(df_0_terms) +Log_Gamma_term;
   //record intermediate values
   NumericVector hastings(iter);
   double posterior_max = 0;
@@ -616,10 +615,10 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
     //gamma omega
     double Log_Gamma_term_tmp = LogOmegaterm(n, K_tmp, alpha_w, beta_w);
     
-    //double hasting_diff = (K_tmp - K_0)*log_K_term + sum(added_terms) - sum(del_terms) + 
-    //  (K_tmp - K_0)*Log_Gabw_gamma1_term + (K_0-K_tmp)*Log_Gabw_gamma0_term;
     double hasting_diff = (K_tmp - K_0)*log_K_term + sum(added_terms) - sum(del_terms) + 
-      Log_Gamma_term_tmp - Log_Gamma_term;
+      (K_tmp - K_0)*Log_Gabw_gamma1_term + (K_0-K_tmp)*Log_Gabw_gamma0_term;
+    //double hasting_diff = (K_tmp - K_0)*log_K_term + sum(added_terms) - sum(del_terms) + 
+    //  Log_Gamma_term_tmp - Log_Gamma_term;
     
     if(hasting_diff > 0)  larger_lklh =  larger_lklh +1;
     
@@ -685,8 +684,8 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
     return(Rcpp::List::create(Named("iter") = iter, _["burn"] = burn, _["gamma_map"] = gamma_map,
                               _["gamma_map_index"]= gamma_map_index,  _["Llist"] = Llist,
                               _["hastings"] = hastings, _["posteriors"] = posteriors, 
-                                _["Ks"] = Ks, _["accept_rate_ad"] = accept_r_ad, _["accept_rate_swap"] = accept_r_swap,
-                                  _["accept_rate_shift"] = accept_r_shift, _["larger_posterior"] = larger_lklh));
+                              _["Ks"] = Ks, _["accept_rate_ad"] = accept_r_ad, _["accept_rate_swap"] = accept_r_swap,
+                                _["accept_rate_shift"] = accept_r_shift, _["larger_posterior"] = larger_lklh));
   }
   
 }
@@ -695,10 +694,10 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
 
 // [[Rcpp::export]]
 Rcpp::List MCMC_shape_fixedSigma(NumericMatrix dat, int iter, int estK = 4, 
-                      Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
-                      NumericVector updateGp = NumericVector::create(0.8, 0.1, 0.1),
-                      double alpha_sigma = 2, double beta_sigma = 0.01, String kernel = "normal", bool open = false, bool ppm_store = false,
-                      double phi = 1, bool fixedSigma = false) {
+                                 Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
+                                 NumericVector updateGp = NumericVector::create(0.8, 0.1, 0.1),
+                                 double alpha_sigma = 2, double beta_sigma = 0.01, String kernel = "normal", bool open = false, bool ppm_store = false,
+                                 double phi = 1, bool fixedSigma = false) {
   
   int burn = iter/2;
   int n = dat.nrow();
@@ -958,5 +957,3 @@ double compute_posterior(NumericMatrix dat,  IntegerVector gamma_0, int estK = 4
   double post_0 = K_0*log_K_term + sum(df_0_terms) +Log_Gamma_term;
   return(post_0);
 }
-
-

@@ -1,4 +1,54 @@
 # ========================================================================================
+# get credible interval using ppi
+# ========================================================================================
+
+get_cred_interval = function(L, ppi, len, pp = 0.01){
+  L_cred_interval = list()
+  L = sort(L)
+  for(pos in 1:length(L)){
+    
+    n = L[pos]
+    L_up = n
+    L_lwr = n
+    while(  (pos == length(L) & ((n < L[1])| (n >= L[pos])) ) || (n < L[ ifelse(pos <length(L), pos+1, 1)])){
+      
+      l = n
+      n = n+1
+      if(n > len ){ n = 1 }
+      
+      cr = cor.test(ppi[,l], ppi[,n],  alternative = "less")
+      if( (!is.na(cr$p.value)) && (cr$p.value <= pp)){
+        L_up = n
+      }else{break}
+      
+    }
+    
+    m = L[pos]
+    while(  (pos == 1 & ((m >=1)| (m > L[pos])) ) || (m > L[pos-1])){
+      
+      l = m
+      m = m-1
+      if(m < 1 ){ m = len }
+      
+      cr = cor.test(ppi[,l], ppi[,m],  alternative = "less")
+      if( (!is.na(cr$p.value)) && (cr$p.value <= pp)){
+        L_lwr = m 
+      }else{break}
+      
+    }
+    
+    L_cred_interval = c(L_cred_interval, list(data.frame(L = L[pos], lwr = L_lwr, upr = L_up)))
+    
+    
+  }
+  
+  L_cred_interval = do.call("rbind.data.frame", L_cred_interval)
+  L_cred_interval
+  
+}
+
+
+# ========================================================================================
 # find the closest point for a given location on a curve
 # Inputs
 #  pos: position on curve [0, 1]
@@ -33,6 +83,7 @@ generate_gamma <- function(n, k){
   gamma[idx] = 1
   return(gamma)
 }
+
 
 # ========================================================================================
 # get the point-wise distance from reduced polygon to original polygon

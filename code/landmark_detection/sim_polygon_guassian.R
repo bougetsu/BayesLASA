@@ -593,5 +593,5 @@ sim_randon_polygon_generator <- function(num, equil = T, sigma, pn = 100, edgel 
 #sim_randon_polygon_generator(4, F, 0.01)
 
 
-res = sim_randon_polygon_generator(3, T, c(1, 4), pn = 100)
+#res = sim_randon_polygon_generator(3, T, c(1, 4), pn = 100)
 
