@@ -58,6 +58,10 @@ p_g_density = Roughness %>% filter(sample == sg) %>%
         panel.background = element_rect(colour = "black", size=0.8)) +
   xlim(c(0, 8))
 
+
+
+
+
 ggsave(file.path(fig.output, "Fig6_GoodPrognosis_TumorRegion.pdf"), p_g1, width = 4, height = 4)
 ggsave(file.path(fig.output, "Fig6_GoodPrognosis_TumorLandmak.pdf"), p_g2, width = 4, height = 4)
 ggsave(file.path(fig.output, "Fig6_GoodPrognosis_density.pdf"), p_g_density, width = 4, height = 4)
@@ -106,3 +110,19 @@ p_p_density = Roughness %>% filter(sample == sp) %>%
 ggsave(file.path(fig.output, "Fig6_PoorPrognosis_TumorRegion.pdf"), p_p1, width = 4, height = 4)
 ggsave(file.path(fig.output, "Fig6_PoorPrognosis_TumorLandmak.pdf"), p_p2, width = 4, height = 4)
 ggsave(file.path(fig.output, "Fig6_PoorPrognosis_density.pdf"), p_p_density, width = 4, height = 4)
+
+
+sk = Roughness %>% filter(sample %in% c(sg, sp)) %>%
+  dplyr::select(sample, Ra) %>%
+  group_by(sample)%>%
+  summarise(kurtosis = e1071::kurtosis(Ra, na.rm = T), skewness = e1071::skewness(Ra, na.rm = T))
+
+sk %>% write.csv(file.path(fig.output, "Fig6_kurtosis_skewness.csv"))
+
+
+# sample kurtosis skewness
+# <int>    <dbl>    <dbl>
+# 1  10127   -0.207    0.575
+# 2  10374    1.41     0.423
+
+
