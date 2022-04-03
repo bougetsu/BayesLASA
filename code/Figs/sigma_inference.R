@@ -1,5 +1,9 @@
 #* sigma inference
-
+library(ggpubr)
+library(tidyr)
+library(Rcpp)
+source("code/toolbox/functions.R")
+sourceCpp("code/landmark_detection/MCMC_shape.cpp")
 # simulation example -----------------------------------------------------------------
 pic_out = file.path("figs/sigma_infer/")
 dir.create(pic_out)
@@ -10,6 +14,9 @@ for(fname in ffs) {
   load(file = file.path("data/manuscript/", paste0("sim_",fname, ".Rdata")))
   L_list = apply(data$ppi[-nrow(data$ppi),], 1, function(x) {which(x != 0)})
   pc = data$raw_data[,c(1, 2)]
+  # normalized = pc_normalizor(data$raw_data[,c(1, 2)])
+  # pc = normalized$pc
+  # perim = normalized$length
   n = nrow(pc)
   alpha_sigma = 3
   beta_sigma = 1/(n)
@@ -44,7 +51,7 @@ for(fname in ffs) {
   sigma_mat = do.call("rbind", sigma_mat)
   sigma_sum = apply(sigma_mat, 2, function(x) return(data.frame(mean = mean(x), lwr = quantile(x, 0.025), upr = quantile(x, 0.975))))
   sigma_sum = do.call("rbind", sigma_sum)
-  sigma_sum =  sigma_sum %>% mutate(index = 1:nrow( sigma_sum), true_val = sigma2_true)
+  sigma_sum =  sigma_sum %>% mutate(index = 1:n, true_val = sigma2_true)
   p = ggplot(data =  sigma_sum, aes(x = index, y = mean))+
     geom_line()+
     geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "lightblue", 
