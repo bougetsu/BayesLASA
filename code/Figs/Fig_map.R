@@ -146,7 +146,7 @@ do.call('rbind', df_cred_ppi_list) %>%
   write.csv(file.path("output", "map_df_cred_ppi.csv"))
 
 do.call('rbind', df_cred_ppm_list) %>%
-  write.csv(file.path("output", "map_df_cred_ppi.csv"))
+  write.csv(file.path("output", "map_df_cred_ppm.csv"))
 
 
 # idx = lapply(df_cred_ppi_list, function(x) { (unique(x$state_ind) %in% c(19, 42)) & (unique(x$bs) == "1d10n") })
@@ -216,47 +216,88 @@ library(latex2exp)
 
 landmarks_plot = landmarks_plot %>%
   mutate(bs = factor(bs, levels = c("0.01", "0.001", "0.0001", "0.00001"),
-                     labels = c(expression(beta[sigma] == "0.01"),
-                                expression(beta[sigma] == "0.001"),
-                                expression(beta[sigma] == "0.0001"),
-                                expression(beta[sigma] == "0.00001"))),
+                     labels = c(expression(b[sigma] == "0.01"),
+                                expression(b[sigma] == "0.001"),
+                                expression(b[sigma] == "0.0001"),
+                                expression(b[sigma] == "0.00001"))),
          state = factor(state))
 
+# list of state names
+landmarks_plot = landmarks_plot %>%
+  mutate(state = stringr::str_to_title(state),
+                          state_pn = paste0("(n = ",state_pns[state_ind], ")"),
+         state_label = paste0(state, "\n", state_pn))%>%
+  group_by(state, bs, Method)%>%
+  mutate(landmark_n = n(), landmark_n = paste0("K = ", landmark_n)) #number of identified landmarks
+pcs = pcs %>%
+  mutate(state = stringr::str_to_title(state),
+         state_pn = paste0("(n = ",state_pns[state_ind], ")"),
+         state_label = paste0(state, "\n", state_pn))
 
 
+llandmarks_plot %>%
+  group_by(state, bs, Method) %>%
+  mutate(legend_x = max(x), legend_y = max(y)) %>%
+  slice(1)
+
+
+pdf(file.path("output/", paste0("MAP_rev_foormat.pdf")), height = 14, width = 10)
 for(i in 1:length(stat_ind_list)){
-  pdf(file.path("output/", paste0("MAP_new_",i,".pdf")), height = 20, width = 10)
   ind = stat_ind_list[[i]]
   landmarks_plot2 = landmarks_plot %>% filter(state_ind %in% ind, Method == "MAP")
+  landmark_legend = subset(pcs, state_ind %in% ind) %>%
+    ungroup()%>%
+    group_by(state) %>%
+    mutate(legend_x = max(x), legend_y = max(y)) %>%
+    slice(1)
+  
+  landmark_legend = landmarks_plot2 %>%
+    group_by(state, bs) %>%
+    slice(1) %>%
+    dplyr::select(bs, state, landmark_n) %>%
+    left_join(landmark_legend, by = c("state"))
+  
   p_map = ggscatter(data = subset(landmarks_plot2, cloc == "Landmarks"),
                     x = "x", y = "y", 
                     group = "state",
                     color = "#FC4E07",
-                    size = 2, shape = 15)+
+                    size = 1.5, shape = 15)+
     geom_point(data = subset(pcs, state_ind %in% ind),
                aes(x = x, y = y, group = state), color = "grey20",
-               size = 0.9)+
+               size = 0.6)+
     geom_polygon(data = subset(pcs, state_ind %in% ind),
                  aes(x = x, y = y, group = state), fill = NA, linetype = "solid",
-                 size = 0.8, color = "grey20") +
+                 size = 0.6, color = "grey20") +
     geom_point(data = subset(landmarks_plot2, cloc == "Landmarks"),
                aes(x = x, y = y),
-               colour = "#FC4E07", size = 2, shape = 15)+
+               colour = "#FC4E07", size = 1.5, shape = 15)+
     geom_polygon(data = subset(landmarks_plot2, cloc == "Landmarks"),
                  aes(x = x, y = y),
-                 colour = "#FC4E07",fill = NA, size = 0.8, linetype = "longdash", alpha = 0.2)+
+                 colour = "#FC4E07",fill = NA,
+                 size = 0.7, linetype = "longdash", alpha = 0.2)+
+    geom_text(data = landmark_legend,
+                    aes(x = 0, y = legend_y+0.02, label = landmark_n)) +
     theme_void()+
-    theme(strip.text=element_text(size=16, colour="black"),
+    theme(strip.text=element_text(size=12, colour = "grey30"),
           strip.background=element_rect(colour="grey", 
                                         fill="grey"),
-          strip.text.y = element_text(angle = 90),
+          strip.text.y = element_text(angle = 90, colour = "grey30"),
           panel.border =element_rect(fill=NA))+
-    theme(aspect.ratio=1)
+    #theme(aspect.ratio=1)
+    coord_quickmap()
   p_maps = p_map + 
-    facet_grid(state ~ bs, scales = "free",labeller = labeller(bs = label_parsed))
+    facet_grid(state_label ~ bs, scales = "free",labeller = labeller(bs = label_parsed))
   print(p_maps)
-  dev.off()
 }
+dev.off()
+
+
+texas_pc = pcs %>% filter(state=="Texas") 
+texas_pc %>%
+  ggplot(aes(x, y)) +geom_polygon()+theme(aspect.ratio=1)
+
+texas_pc %>%
+  ggplot(aes(x, y)) +geom_polygon()+coord_quickmap()
 
 for(ind in 1: unique(landmarks_plot$state_ind)){
   landmarks_plot2 = landmarks_plot %>% filter(state_ind %in% ind, Method == "MAP")
