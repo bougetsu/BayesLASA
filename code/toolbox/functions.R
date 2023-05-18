@@ -423,3 +423,139 @@ curv_calculator <- function(pc, dist) {
   return (curv);
 }
 
+# ========================================================================================
+# calculae MCMC
+# ========================================================================================
+cal_mcc = function(TP, TN, FP, FN){
+  return((TP*TN -FP*FN)/sqrt(  (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ))
+}
+
+# ========================================================================================
+# calculae MCMC using landmard points
+# ========================================================================================
+
+L2mcc = function(gamma_true, L_pred){
+  n = length(gamma_true)
+  gamma_pred = rep(0, n)
+  gamma_pred[L_pred] = 1
+  TP = sum(gamma_pred == 1 & gamma_true == 1)
+  TN = sum(gamma_pred == 0 & gamma_true == 0)
+  FP = sum(gamma_pred == 1 & gamma_true == 0)
+  FN = sum(gamma_pred == 0 & gamma_true == 1)
+  return((TP*TN -FP*FN)/sqrt(  (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ))
+}
+
+L2adj = function(gamma_true, L_pred){
+  n = length(gamma_true)
+  gamma_pred = rep(0, n)
+  gamma_pred[L_pred] = 1
+  tab <- table(gamma_true, gamma_pred)
+  f2 <- function(n) n*(n-1)/2
+  sum.f2 <- function(v) sum(f2(v))
+  marg.1 <- apply(tab,1,sum)
+  marg.2 <- apply(tab,2,sum)  
+  n	<- sum(tab)
+  prod <- sum.f2(marg.1)*sum.f2(marg.2)/f2(n)
+  num <- (sum.f2(as.vector(tab))- prod)
+  den <- 0.5*(sum.f2(marg.1)+sum.f2(marg.2))-prod
+  return(num/den)
+}
+
+# ========================================================================================
+# round function
+# ========================================================================================
+rround = Vectorize(function(x){
+  dig = x %% 1
+  if(dig < 0.5){
+    return(floor(x))
+  }else{
+    return(ceiling(x))
+  }
+})
+
+# ========================================================================================
+# get landmark point from CI
+# ========================================================================================
+Ci2Bin = function(df, L_true){
+  L_ci = NULL
+  for(i in 1:nrow(df)){
+    interv1 = c( max(df[i,]):n, 1:min(df[i,]))
+    interv2 =min(df[i,]):max(df[i,])
+    if(df[i,1] > df[i,2] ){
+      interv = interv1
+    }else{
+      interv = interv2
+    }
+    if(length( intersect(L_true, interv)) > 0){
+      L_ci = c(L_ci, intersect(L_true, interv))
+    }else{
+      L_ci = c(L_ci, interv[rround(length(interv)/2)] )
+    }
+    
+  }
+  return(sort(unique(L_ci)))
+}
+
+# ========================================================================================
+# get window around landmark
+# ========================================================================================
+L_window = function(L_true, L_pred, n, window = 5){
+  L_pred = sort(L_pred)
+  L_window = NULL
+  for(l in L_pred){
+    ls = l+-window:window
+    ls[ls <1] = ls[ls <1]+n
+    ls[ls >n] = ls[ls >n]-n
+    
+    if(length( intersect(L_true, ls)) == 1){
+      L_window = c(L_window, intersect(L_true, ls))
+      L_true = setdiff(L_true, intersect(L_true, ls))
+    }else if(length( intersect(L_true, ls)) == 0){
+      L_window = c(L_window, l )
+    }else{
+      ll = intersect(L_true, ls)
+      ll = ll[which.min(abs(ll -l))]
+      L_window = c(L_window, ll)
+      L_true = setdiff(L_true, ll)
+    }
+    
+  }
+  
+  return(L_window)
+}
+
+
+#TPR=TP/(TP + FP)
+L2TPR = function(gamma_true, L_pred){
+  n = length(gamma_true)
+  gamma_pred = rep(0, n)
+  gamma_pred[L_pred] = 1
+  TP = sum(gamma_pred == 1 & gamma_true == 1)
+  TN = sum(gamma_pred == 0 & gamma_true == 0)
+  FP = sum(gamma_pred == 1 & gamma_true == 0)
+  FN = sum(gamma_pred == 0 & gamma_true == 1)
+  return((TP/(TP+FP)))
+}
+
+#FPR=FP/(FP + TN)
+L2FPR = function(gamma_true, L_pred){
+  n = length(gamma_true)
+  gamma_pred = rep(0, n)
+  gamma_pred[L_pred] = 1
+  TP = sum(gamma_pred == 1 & gamma_true == 1)
+  TN = sum(gamma_pred == 0 & gamma_true == 0)
+  FP = sum(gamma_pred == 1 & gamma_true == 0)
+  FN = sum(gamma_pred == 0 & gamma_true == 1)
+  return((FP/(FP + TN)))
+}
+
+round_distance = Vectorize(function(a, b, interval = 1){
+  res1 = a-b
+  if(a <b){
+    res2 = (a+interval -b)
+  }else{
+    res2 = a-b-interval
+  }
+  return(min(abs(res1), abs(res2)))
+})
+
