@@ -51,8 +51,8 @@ library(dplyr)
 #library(mvnfast, package = "mvnfast")
 library(mvtnorm)
 library(Rcpp)
-sourceCpp("~/Dropbox/shape_analysis_cong/code/landmark_detection/MCMC_shape_gaussian.cpp")
-source("~/Dropbox/shape_analysis_cong/code/functional_data_analysis/functions.R")
+sourceCpp("code/landmark_detection/MCMC_shape.cpp")
+source("code/toolbox/functions.R")
 
 is.square.matrix <- function( x )
 {
