@@ -11,15 +11,16 @@ This folder contains the scripts and data to reproduce the figures and tables re
   * `demo_data_mpeg7_deer`: deer application case from MPEG7 dataset.
   
   * `real_data_pathology_images`: pathology images of lung cancer patients
-  
-  * `real_data_us_state`: maps of United States
-  
-    * `Processed`: polygonal chain from XXX.
+    
+    * `Processed`: polygonal chains of tumor region from pathology images. The raw tumor pathology images from the National Lung Screening Trial (NLST) are available at https://cdas.cancer.gov/datasets/nlst/
     
     * `Summary_statistics`: roughness measurement results including distanced-based and model-based
     
     * `Radius_based`: results of tumor roughness boundary measurement
     
+  * `real_data_us_state`: maps of United States
+  
+
   * `simulated_data`: simulation dataset of polygonal chain
   
     * `Polygon`: polygonal chains generated for simulation from `src/sim_generate.R`, each polygon object contains `original_dat` with `x`, `y` coordinates, `gamma` and `sigma`; `normalized` polygon with perimeter = 1.
