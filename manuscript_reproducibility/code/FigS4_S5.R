@@ -16,8 +16,8 @@ source("code/toolbox/functions.R")
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/simulated_data/"
-fig.output = "manuscript_reproducibility/figs"
-output <- file.path(input, "summary_statistics")
+fig.output = "manuscript_reproducibility/figs_tabs/"
+output <- file.path(input, "Summary_statistics")
 dir.create(output)
 
 
@@ -25,7 +25,7 @@ dir.create(output)
 #* to get MCC and ARI for each method
 #* 
 #* NOTE: TO GET THE MCC and ARI may take a while
-#* PLEASE BE PATIENT or skip this section to use the ready-to-plot data in the summary_statistics folder
+#* PLEASE BE PATIENT or skip this section to use the ready-to-plot data in the `Summary_statistics` folder
 #* 
 #* 
 
@@ -43,9 +43,6 @@ for(f in ff){
   ##load original data
   load(file = file.path(input, "polygon", paste0(fname, ".Rdata")), verbose = T)
   
-  #load(file.path(output2, "curvature", paste0(fname, "_curvature.Rdata")))
-  #res_tb = data.frame(sample = fname, method = c("PPM", "PPI", "JASA001", "JASA005", "JASA01"),
-  #                    MCC = numeric(5), ARI = numeric(5))
   res_tb = data.frame(sample = fname, method = c("PPM", "PPM_window5", "PPM_window10", 
                                                  "PPI", "PPI_window5", "PPI_window10",
                                                  "ALDUQ",  "ALDUQ_window5", "ALDUQ_window10",

@@ -17,7 +17,7 @@ source("code/toolbox/functions.R")
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/demo_data_mpeg7_deer/"
-fig.output = "manuscript_reproducibility/figs"
+fig.output = "manuscript_reproducibility/figs_tabs/"
 
 #* load input data of deer shape
 fname = "MPEG7closed.mat"
@@ -120,8 +120,6 @@ ggsave(p, file = file.path(fig.output, "Fig_4a.pdf"), width = 12, height = 9)
 ##################################################################
 
 output <- "~/Dropbox/shape_analysis_cong/sandbox/output/1225_sim"
-
-
 
 
 ff = dir(input, pattern = "ALDUQ.*csv")

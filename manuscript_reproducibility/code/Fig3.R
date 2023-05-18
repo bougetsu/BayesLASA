@@ -34,13 +34,13 @@ for(fname in ffs){
   s = unlist(strsplit(fname, "_"))
   num = s[2]
   ##load chull result
-  load(file.path(input, "chull", paste0(fname, "_hpts.Rdata")), verbose = T)
+  load(file.path(input, "Chull", paste0(fname, "_hpts.Rdata")), verbose = T)
   ##load ADLUQ result
   load(file.path(input, "ALDUQ", paste0(fname, "peak_L_ci.rdata")),verbose = T)
   ##load BayesLASA result
   load(file = file.path(input, "BayesLASA", paste0(fname, "_MCMC_L.Rdata")), verbose = T)
   ##load original data
-  load(file = file.path(input, "polygon", paste0(fname, ".Rdata")), verbose = T)
+  load(file = file.path(input, "Polygon", paste0(fname, ".Rdata")), verbose = T)
   
   pc = polyg$original_dat[,c(1, 2)]
   pcs = c(pcs, list(cbind.data.frame(pc, K = num, sigma2 = polyg$original_dat[,4])))

@@ -3,7 +3,7 @@
 #* Fig. 6
 #* Table.1, 2 and S2-S7, S16
 #***********************************************
-#library("depmixS4") #the HMM library we’ll use
+
 library(ggplot2)
 library(tidyr)
 library(dplyr)
@@ -18,14 +18,14 @@ library(tab)
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/real_data_pathology_images/"
-data.loc =  file.path(input, "processed")
+data.loc =  file.path(input, "Processed")
 rdatloc = file.path(input, "BayesLASA")
 
 fig.output = "manuscript_reproducibility/figs_tabs"
 # Read data ---------------------------------------------------------------
 
 ##* load roughness
-Roughness <- read.csv(file.path(input, "Roughness_summary.csv"), row.names = 1)
+Roughness <- read.csv(file.path(input, "Summary_statistics","Roughness_summary.csv"), row.names = 1)
 rough = Roughness %>% dplyr::filter(shape == 1) %>%
   gather(roughness, value, 4:14) %>%
   group_by(sample, BetaSigma, roughness) %>%
@@ -275,14 +275,3 @@ p_TBR = df_tbr %>% filter(covariate == "tb_roughness", l <= 200) %>%
   scale_y_continuous(breaks = c(0, 0.05, 0.25, 0.5, 0.75, 1))
 
 ggsave(file.path(fig.output, "Fig_S16.pdf"), p_TBR, width = 5, height = 3)
-
-
-
-
-sk = Roughness %>% filter(sample %in% c(sg, sp)) %>%
-  dplyr::select(sample, Ra) %>%
-  group_by(sample)%>%
-  summarise(kurtosis = e1071::kurtosis(Ra, na.rm = T), skewness = e1071::skewness(Ra, na.rm = T))
-
-sk %>% write.csv(file.path(fig.output, "Fig6_kurtosis_skewness.csv"))
-

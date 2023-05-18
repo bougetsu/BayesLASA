@@ -9,11 +9,11 @@ library(ggpubr)
 #***************
 input = "manuscript_reproducibility/data/real_data_pathology_images/"
 fig.output = "manuscript_reproducibility/figs_tabs/"
-data.loc =  file.path(input, "processed")
+data.loc =  file.path(input, "Processed")
 rdatloc = file.path(input, "BayesLASA")
 
 ##* load roughness
-Roughness <- read.csv(file.path(input, "Roughness_summary.csv"))
+Roughness <- read.csv(file.path(input, "Summary_statistics","Roughness_summary.csv"))
 
 ##* good 10374
 sg = 10374
@@ -55,9 +55,9 @@ p_g_density = Roughness %>% filter(sample == sg) %>%
         panel.background = element_rect(colour = "black", size=0.8)) +
   xlim(c(0, 8))
 
-ggsave(file.path(fig.output, "Fig5a_GoodPrognosis_TumorRegion.pdf"), p_g1, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig5b_GoodPrognosis_TumorLandmak.pdf"), p_g2, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig5c_GoodPrognosis_density.pdf"), p_g_density, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5a_GoodPrognosis_TumorRegion.pdf"), p_g1, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5b_GoodPrognosis_TumorLandmak.pdf"), p_g2, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5c_GoodPrognosis_density.pdf"), p_g_density, width = 4, height = 4)
 
 
 ##* poor 10127
@@ -97,7 +97,7 @@ p_p_density = Roughness %>% filter(sample == sp) %>%
         panel.background = element_rect(colour = "black", size=0.8)) +
   xlim(c(0, 8))
 
-ggsave(file.path(fig.output, "Fig5d_PoorPrognosis_TumorRegion.pdf"), p_p1, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig5e_PoorPrognosis_TumorLandmak.pdf"), p_p2, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig5f_PoorPrognosis_density.pdf"), p_p_density, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5d_PoorPrognosis_TumorRegion.pdf"), p_p1, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5e_PoorPrognosis_TumorLandmak.pdf"), p_p2, width = 4, height = 4)
+ggsave(file.path(fig.output, "Fig_5f_PoorPrognosis_density.pdf"), p_p_density, width = 4, height = 4)
 
