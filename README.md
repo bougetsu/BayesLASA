@@ -12,7 +12,7 @@ Here is a simple demo on how to use BayesLASA for landmark identification.
   
   * `landmark_detection/sim_polygon_gaussian.R`: function to generation simulated polygons
   
-  * `toolbox/funcitons.R`: utilized functions for related analysis
+  * `toolbox/functions.R`: utilized functions for related analysis
   
 * `manuscript_reproducibility`: files to reproduce the analysis in the BayesLASA manuscript
 
