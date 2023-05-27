@@ -17,7 +17,7 @@ source("code/toolbox/functions.R")
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/demo_data_mpeg7_deer/"
-fig.output = "manuscript_reproducibility/figs_tabs/"
+fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 #* load input data of deer shape
 fname = "MPEG7closed.mat"
@@ -147,12 +147,31 @@ colnames(pc) = c("x", "y")
 colnames(landmarks_alduq)[c(1, 2)] = c("x", "y")
 
 #* K histogram
-Ks_alduq$lambda = factor(Ks_alduq$lambda, levels = c("0.00001", "0.0001", "0.001", "0.01"))
-p_Ks = gghistogram(Ks_alduq, x = "K", y = "..density..", fill = "lightgray", binwidth = 1)+
-  theme(strip.text=element_text(size=12, colour="black"),
-        strip.background=element_rect(colour="grey", 
-                                      fill="grey"), panel.border =element_rect(fill=NA)) 
-p_Ks_panel = facet(p_Ks, facet.by = c("lambda"),nrow = 1, scales = "free_x")
+#* 
+#* 
+Ks_alduq <- data.frame(lambda = c(rep("lambda == 0.00001", 4), rep("lambda == 0.0001", 5), rep("lambda == 0.001", 9), rep("lambda == 0.01", 7)),
+                             K = c(3:6, 3:7, 13:21, 18:24),
+                             Probability = c(0.75, 0.01, 0.25, 0.01,
+                                             0.005, 0.01, 0.55, 0.425, 0.025,
+                                             0.005, 0.005, 0.04, 0.23, 0.17, 0.48, 0.06, 0.01, 0.005,
+                                             0.17, 0.34, 0.27, 0.16, 0.06, 0.02, 0.005))
+
+p_Ks_panel <- Ks_alduq %>%
+  ggplot(aes(x = K, y = Probability)) +
+  geom_bar(stat = "identity", width = 1, fill = "grey90", col = "black") +
+  facet_grid(~lambda, scales = "free_x", labeller = label_parsed) +
+  theme_bw() +
+  labs(x = "") +
+  scale_x_continuous(breaks = scales::extended_breaks(n = 7)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 15), axis.title = element_text(size = 15),
+        strip.text.x = element_text(size = 15))
+# Ks_alduq$lambda = factor(Ks_alduq$lambda, levels = c("0.00001", "0.0001", "0.001", "0.01"))
+# p_Ks = gghistogram(Ks_alduq, x = "K", y = "..density..", fill = "lightgray", binwidth = 1)+
+#   theme(strip.text=element_text(size=12, colour="black"),
+#         strip.background=element_rect(colour="grey", 
+#                                       fill="grey"), panel.border =element_rect(fill=NA)) 
+# p_Ks_panel = facet(p_Ks, facet.by = c("lambda"),nrow = 1, scales = "free_x")
 
 #* ALDUQ landmarks
 landmarks_alduq$lambda = factor(landmarks_alduq$lambda, levels = c("0.00001", "0.0001", "0.001", "0.01"))

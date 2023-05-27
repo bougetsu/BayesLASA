@@ -10,7 +10,7 @@ library(mcclust)
 #*file path
 #***************
 input = "manuscript_reproducibility/data/real_data_us_state/"
-fig.output = "manuscript_reproducibility/figs_tabs/"
+fig.output = "manuscript_reproducibility/figures_and_tables/"
 code_path <- "code/"
 
 #* raw data

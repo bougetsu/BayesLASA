@@ -7,7 +7,7 @@ library(ggpubr)
 #*file path
 #***************
 input = "manuscript_reproducibility/data/simulated_data/"
-fig.output = "manuscript_reproducibility/figs_tabs/"
+fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 #***************
 #* read data

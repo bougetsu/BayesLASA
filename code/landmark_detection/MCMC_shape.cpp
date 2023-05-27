@@ -273,12 +273,14 @@ Rcpp::List updategamma(IntegerVector gamma, NumericVector p = NumericVector::cre
   int n = gamma.size();
   IntegerVector newgamma = clone(gamma);
   IntegerVector idx = seq_len(n);
+  // add/delete
   if((flag == 1) | (sum(gamma) == n)){
     while(cnt < 3){
       int candidate = sample(idx, 1, false)[0] ;
       newgamma[candidate-1] = 1- newgamma[candidate-1];
       cnt = sum(newgamma);
     }
+  // swap
   }else if(flag == 2){
     IntegerVector L = gamma2L(gamma);
     int p1 = sample(L, 1, false)[0];
@@ -310,6 +312,7 @@ Rcpp::List updategamma(IntegerVector gamma, NumericVector p = NumericVector::cre
     //Rcout << "p0 " << p0 << " \n";
     newgamma[p1] = 1- newgamma[p1];
     newgamma[p0] = 1- newgamma[p0];
+    //shift
   }else if(flag == 3){
     bool left = sample(LogicalVector::create(true, false), 1, false)[0];
     if(left){
@@ -470,7 +473,9 @@ double LogOmegaterm(int n, int K, double alpha, double beta){
 Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4, 
                       Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
                       NumericVector updateGp = NumericVector::create(0.8, 0.1, 0.1),
-                      double alpha_sigma = 2, double beta_sigma = 0.01, String kernel = "normal", bool open = false, bool ppm_store = false) {
+                      double alpha_sigma = 2, double beta_sigma = 0.01,
+                      String kernel = "normal", bool open = false,
+                      bool ppm_store = false) {
   
   int burn = iter/2;
   int n = dat.nrow();
@@ -478,8 +483,6 @@ Rcpp::List MCMC_shape(NumericMatrix dat, int iter, int estK = 4,
   //hyper-parameter 
   double alpha_w = 2.0*estK/(n-1.0);
   double beta_w = 2.0 - alpha_w;
-  
-  
   
   //Initialize gamma
   IntegerVector gamma_0(n);

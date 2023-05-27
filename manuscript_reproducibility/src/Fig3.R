@@ -15,7 +15,7 @@ library(ggpubr)
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/simulated_data/"
-fig.output = "manuscript_reproducibility/figs_tabs/"
+fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 source("code/toolbox/functions.R")
 

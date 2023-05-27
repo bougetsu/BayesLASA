@@ -45,7 +45,7 @@ Under each data case folder in the `data`, there may contain several of the foll
 ### Reproduce analysis
 
 To reproduce the figure or table in the manuscript, e.g., `Figure 3`. We just need to run `source("manuscript_reproducibility/src/Fig3.R")` from the repo root. And the corresponding figure will be
-saved in `figs_tabs`.
+saved in `figures_and_tables`.
 
 Some scripts also contains the steps to run `BayesLASA` or `Convex hull` on the dataset for landmark identification. Since the MCMC process takes a while to complete, the ready-to-use results are already saved in the `BayesLASA` sub-folder under each data case folder.
 

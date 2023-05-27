@@ -9,7 +9,7 @@ library(corrplot)
 #***************
 input = "manuscript_reproducibility/data/simulated_data/"
 code_path <- "code/"
-fig.output = "manuscript_reproducibility/figs_tabs/"
+fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 source(file.path(code_path,"toolbox/functions.R"))
 

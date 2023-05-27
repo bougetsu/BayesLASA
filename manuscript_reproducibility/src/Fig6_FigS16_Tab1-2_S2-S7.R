@@ -21,7 +21,7 @@ input = "manuscript_reproducibility/data/real_data_pathology_images/"
 data.loc =  file.path(input, "Processed")
 rdatloc = file.path(input, "BayesLASA")
 
-fig.output = "manuscript_reproducibility/figs_tabs"
+fig.output = "manuscript_reproducibility/figures_and_tables"
 # Read data ---------------------------------------------------------------
 
 ##* load roughness
