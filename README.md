@@ -10,7 +10,7 @@ Here is a simple demo on how to use BayesLASA for landmark identification.
 
   * `landmark_detection/MCMC_shape.cpp`: BayesLASA function
   
-  * `landmark_detection/sim_polygon_gaussian.R`: function to generation simulated polygons
+  * `landmark_detection/sim_polygon_gaussian.R`: function to generate simulated polygons
   
   * `toolbox/functions.R`: utilized functions for related analysis
   
