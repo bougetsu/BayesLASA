@@ -31,15 +31,28 @@ MCMC_shape(dat,  iter = n,  estK = est.K, gamma_i = gamma_i, alpha_sigma = 3, be
 ####################
 # input argument
 #
-# dat: polygonal chain
-# iter: interations for MCMC, default = 100*n, where n is total number of points in the chain.
-# estK: estimated number of landmark points, default = 3
-# gamma_i: initial gamma, if not speficifed, will generate a random one
-# alpha_sigma: default = 3
-# beta_sigma: default = 1/n for normalized chain
-# ppm_store: if return the ppm matrix
+# dat: matrix, polygonal chain
+# iter: numerical scalar, interations for MCMC, default = 100*n, where n is total number of points in the chain.
+# estK: integer, estimated number of landmark points, default = 3
+# gamma_i: integer vector. initial gamma, if not speficifed, will generate a random one
+# updateGp: numerical vector. probability vector for gamma updating method, and the order is c("add or delete", "swap",  "shift").
+#           default = c(0.8, 0.1, 0.1). The sum need to be 1. 
+#           If the user would like to fixed the number of K, set the first probability value to 0.
+# alpha_sigma: numerical scalar, default = 3
+# beta_sigma: numerical scalar, default = 1/n for normalized chain
+# ppm_store: boolen, if return the ppm matrix
+# open: boolen, if the polygonal chain is open, default = False
 # 
-# output
+# output: list, iter: total iteration numbers, burn: burn-in numbers, gamma_map: map gamma value,
+#                           gamma_map_index: position index of map gamma, 
+#                           Llist: list of Ls in each iteration,
+#                           hastings: difference in posterior values in each iteration,,
+#                           posteriors: posterior values in each iteration, 
+#                           Ks: K in each iteraction,
+#                           accept_r_ad: accepting rate of new poposed gamma by add-or-delete,
+#                           accept_r_swap: accepting rate of new poposed gamma by swap,
+#                           accept_r_shift: accepting rate of new poposed gamma by shipt,
+#                           larger_lklh: if new MCMC interation has larger posterior)
 # 
 ####################
 ```
