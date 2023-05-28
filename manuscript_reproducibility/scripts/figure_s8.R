@@ -1,5 +1,5 @@
 #######################################################################
-##* Fig.S7-S8 sensitivity analysis of simulated polygons
+##* Fig.S8 sensitivity analysis of simulated polygons
 ##* 1. read the simulated data
 ##* 2. perform BayesLASA
 ##* 3. calculate MCC and ARI

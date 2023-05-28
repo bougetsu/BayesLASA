@@ -1,7 +1,7 @@
 ##############################################################
 #*Run BayesLASA on pathology images data
 #*1. read processed pathology image data
-#*2. run BayesLASA
+#*2. run BayesLASA **TAKE LONG TIME, SUGGEST TO RUN ON A SERVER WITH PARALLEL
 #*3. summarize the results from BayesLASA
 #*4. calculate distance-based and model-based roughness measurement
 ##############################################################
@@ -32,7 +32,12 @@ sourceCpp(file.path(code_file,"MCMC_shape.cpp"))
 source(file.path("code/toolbox/functions.R"))
 
 # run BayesLASA -----------------------------------------------------------
-
+##************************************
+##*
+##*TAKE LONG TIME
+##*SUGGEST TO RUN ON A SERVER WITH PARALLEL
+##*
+##************************************
 alpha_sigma = 3
 beta_sigma = 500
 est.K = 10
