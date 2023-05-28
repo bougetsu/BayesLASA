@@ -1,0 +1,13 @@
+sample,method,MCC,ARI
+Normal_5_equil_TRUE_pn_150_seed_8,PPM,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,PPM_window5,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,PPM_window10,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,PPI,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,PPI_window5,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,PPI_window10,1,1
+Normal_5_equil_TRUE_pn_150_seed_8,ALDUQ,0.151619608715781,0.140763529449187
+Normal_5_equil_TRUE_pn_150_seed_8,ALDUQ_window5,0.909717652294684,0.899112502669763
+Normal_5_equil_TRUE_pn_150_seed_8,ALDUQ_window10,0.909717652294684,0.899112502669763
+Normal_5_equil_TRUE_pn_150_seed_8,chull,0.447914008764683,0.288011474470923
+Normal_5_equil_TRUE_pn_150_seed_8,chull_window5,0.502865352970744,0.362266980363507
+Normal_5_equil_TRUE_pn_150_seed_8,chull_window10,0.502865352970744,0.362266980363507
