@@ -25,7 +25,7 @@ fig.output = "manuscript_reproducibility/figures_and_tables"
 # Read data ---------------------------------------------------------------
 
 ##* load roughness
-Roughness <- read.csv(file.path(input, "Summary_statistics","Roughness_summary.csv"), row.names = 1)
+Roughness <- read.csv(file.path(input, "summary_statistics","Roughness_summary.csv"), row.names = 1)
 rough = Roughness %>% dplyr::filter(shape == 1) %>%
   gather(roughness, value, 4:14) %>%
   group_by(sample, BetaSigma, roughness) %>%

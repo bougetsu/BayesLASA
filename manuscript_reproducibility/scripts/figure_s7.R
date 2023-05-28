@@ -1,5 +1,5 @@
 #######################################################################
-##* Fig.S7-S8 Sensitivity analysis of simulated polygons
+##* Fig.S7-S8 sensitivity analysis of simulated polygons
 ##* 1. read the simulated data
 ##* 2. perform BayesLASA
 ##* 3. calculate MCC and ARI
@@ -21,7 +21,7 @@ source(file.path(code_path,"toolbox/functions.R"))
 # Identify landmark points using different beta_sigma and initial K -------
 ####################################################################################
 ##** NOTE: It takes a while to run the MCMC
-##** Results are already saved in the 'manuscript_reproducibility/data/simulated_data//Sensitivity'
+##** Results are already saved in the 'manuscript_reproducibility/data/simulated_data//sensitivity'
 ##** uncomment the below code section to re-run in needed.
 ####################################################################################
 # library(mcclust) 
@@ -33,7 +33,7 @@ source(file.path(code_path,"toolbox/functions.R"))
 # sourceCpp(file.path(code_path,"landmark_detection/MCMC_shape.cpp"))
 
 # tm_df = NULL
-# ff = dir(file.path(input,"Polygon"), pattern = "Normal_5.*pn_150.*Rdata")
+# ff = dir(file.path(input_raw), pattern = "Normal_5.*pn_150.*Rdata")
 # tm_df = foreach(f = ff) %dopar%{
 #   cat(f)
 #   load(file.path(output,"sim_data", f))
@@ -84,8 +84,8 @@ source(file.path(code_path,"toolbox/functions.R"))
 #       sensitivity_res = c(sensitivity_res , list(data))
 #     }
 #   }
-#   fname = gsub(".Rdata", "_Sensitivity_L.Rdata", f)
-#   save(sensitivity_res, file = file.path(input, "Sensitivity", fname))
+#   fname = gsub(".Rdata", "_sensitivity_L.Rdata", f)
+#   save(sensitivity_res, file = file.path(input, "sensitivity", fname))
 #   cat("finished ", fname, "\n")
 # }
 
@@ -94,14 +94,14 @@ source(file.path(code_path,"toolbox/functions.R"))
 # Calculate MCC, ARI, TPR and FPR  -------
 ####################################################################################
 ##** NOTE: It takes a while to calculated the MCC, ARI, TPR and FPR
-##** Results are already saved in the 'manuscript_reproducibility/data/simulated_data//Sensitivity'
+##** Results are already saved in the 'manuscript_reproducibility/data/simulated_data//sensitivity'
 ####################################################################################
 
-ff = dir(file.path(input, "Sensitivity"), pattern = "Sensitivity_L.Rdata")
+ff = dir(file.path(input, "sensitivity"), pattern = "sensitivity_L.Rdata")
 for(f in ff){
-  fname = gsub("_Sensitivity.*", "", f)
+  fname = gsub("_sensitivity.*", "", f)
   ##load BayesLASA result
-  load(file = file.path(input, "Sensitivity", f), verbose = T)
+  load(file = file.path(input, "sensitivity", f), verbose = T)
   ##load original data
   load(file = file.path(input_raw, paste0(fname, ".Rdata")), verbose = T)
   
@@ -224,17 +224,17 @@ for(f in ff){
   sens_tb = do.call("rbind.data.frame", sens_tb)
   
   write.csv(sens_tb, 
-            file = file.path(input, "Sensitivity", paste0(fname, "_summary_coef.csv")),
+            file = file.path(input, "sensitivity", paste0(fname, "_summary_coef.csv")),
             quote = F, row.names = F)
 }
 
 # Load MCC and ARI and plot -------
 
 ##* load data
-ff = dir(file.path(input, "Sensitivity"), pattern = "_summary_coef.csv")
+ff = dir(file.path(input, "sensitivity"), pattern = "_summary_coef.csv")
 
 sensitivity_tb = do.call(rbind,
-          lapply(file.path(input, "Sensitivity", ff), function(x) read.csv(x, stringsAsFactors = F)))
+          lapply(file.path(input, "sensitivity", ff), function(x) read.csv(x, stringsAsFactors = F)))
 
 sensitivity_tb2 = sensitivity_tb  %>%
   group_by(beta_sigma, estK, method) %>%

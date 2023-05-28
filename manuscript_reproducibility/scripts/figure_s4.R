@@ -20,7 +20,7 @@ code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/simulated_data/"
 input_raw = "data/simulated_data/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
-output <- file.path(input, "Summary_statistics")
+output <- file.path(input, "summary_statistics")
 dir.create(output)
 
 
@@ -28,7 +28,7 @@ dir.create(output)
 #* to get MCC and ARI for each method
 #* 
 #* NOTE: TO GET THE MCC and ARI may take a while
-#* you can skip this section to use the ready-to-plot data in the `Summary_statistics` folder
+#* you can skip this section to use the ready-to-plot data in the `summary_statistics` folder
 #* or uncomment this code section to calculate
 #* 
 #* 

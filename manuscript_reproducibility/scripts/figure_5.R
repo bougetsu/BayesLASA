@@ -17,7 +17,7 @@ data.loc =  "data/real_data_pathology_images"
 rdatloc = file.path(input, "BayesLASA")
 
 ##* load roughness
-Roughness <- read.csv(file.path(input, "Summary_statistics","Roughness_summary.csv"))
+Roughness <- read.csv(file.path(input, "summary_statistics","Roughness_summary.csv"))
 
 ##* good 10374
 sg = 10374
