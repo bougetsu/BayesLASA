@@ -15,6 +15,7 @@ library(ggpubr)
 #***************
 code_file = "code/landmark_detection/"
 input = "manuscript_reproducibility/data/simulated_data/"
+input_raw = "data/simulated_data/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 source("code/toolbox/functions.R")
@@ -40,7 +41,7 @@ for(fname in ffs){
   ##load BayesLASA result
   load(file = file.path(input, "BayesLASA", paste0(fname, "_MCMC_L.Rdata")), verbose = T)
   ##load original data
-  load(file = file.path(input, "Polygon", paste0(fname, ".Rdata")), verbose = T)
+  load(file = file.path(input_raw, paste0(fname, ".Rdata")), verbose = T)
   
   pc = polyg$original_dat[,c(1, 2)]
   pcs = c(pcs, list(cbind.data.frame(pc, K = num, sigma2 = polyg$original_dat[,4])))
@@ -174,7 +175,7 @@ p_example = ggscatter(data = subset(landmarks2, cloc == "Lamdmarks"), x = "x", y
         strip.background=element_rect(colour="grey", 
                                       fill="grey"), panel.border =element_rect(size=0.5)) 
 
-ggsave(p_example, file = file.path(fig.output, paste0("Fig_3.pdf")), width = 12, height = 9)
+ggsave(p_example, file = file.path(fig.output, paste0("figure_3.pdf")), width = 12, height = 9)
 
 
 
