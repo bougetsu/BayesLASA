@@ -4,6 +4,7 @@
 ##* 2. perform BayesLASA
 ##* 3. calculate MCC and ARI
 ##* 4. plot MCC, ARI, TPR and FPR
+##* The final FPR plot in the manuscript was overlaid using Adobe illustrator for better visualization
 #######################################################################
 library(RColorBrewer )
 library(corrplot)
