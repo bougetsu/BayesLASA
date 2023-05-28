@@ -1,5 +1,6 @@
 #************************************************
 #*Fig.4. application deer
+#*read the raw data and BayesLASA output
 #*plot the identified landmarks in deer application case
 #*the histooram of landmark numbers K during MCMC
 #***********************************************

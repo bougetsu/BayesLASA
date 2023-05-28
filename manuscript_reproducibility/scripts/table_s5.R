@@ -1,5 +1,6 @@
 #***********************************************
 #* Survival analysis of lung cancer study
+#* read the calculated roughness measurement based on BayesLASA output
 #* Table.S2-S7, Cox model with surface roughness as predictor for lung cancer patients
 #* Table. S5 Rx
 #***********************************************

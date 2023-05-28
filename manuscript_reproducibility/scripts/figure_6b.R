@@ -1,5 +1,6 @@
 #***********************************************
 #* Survival analysis of lung cancer study
+#* read the calculated roughness measurement based on BayesLASA output
 #* Figure 6b KM plot of high vs low risk of lung cancer patients
 #* predicted using model-based roughness measurement 
 #* HMM transit prob, Negative to positive

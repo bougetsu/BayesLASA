@@ -1,6 +1,6 @@
 #***********************************************
 #* Survival analysis of lung cancer study
-#* Fig. 6
+#* read the calculated roughness measurement based on BayesLASA output
 #* Table.1, 2 and S2-S7, S16
 #***********************************************
 

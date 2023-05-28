@@ -1,5 +1,6 @@
 #***********************************************
 #* Survival analysis of lung cancer study
+#* read the calculated roughness measurement based on BayesLASA output
 #* Table. S7 cox model using model-based roughness measurement as predictors
 #* HMM transit prob, positive to negative
 #***********************************************

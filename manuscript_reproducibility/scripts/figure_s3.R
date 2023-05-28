@@ -1,6 +1,8 @@
 #************************************************
 #*Fig. S3. Sigma inference of simulated polygon
-#*
+#* read the simulated polygonal chain and identified landmark poitns
+#* infer the sigma
+#* plot the estimated sigma interval against true value
 #***********************************************
 library(dplyr)
 library(tidyr)
@@ -15,7 +17,7 @@ set.seed(9080)
 #*file path
 #***************
 code_file = "code/landmark_detection/"
-input = "manuscript_reproducibility/data/simulated_data/"
+input_raw = "data/simulated_data/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 # simulation example -----------------------------------------------------------------
@@ -29,8 +31,10 @@ for(fname in ffs) {
   
   K = gsub("Normal_(\\d)_.*","\\1" , fname)
   
-  load(file = file.path(input, "Polygon", paste0("sim_",fname, ".Rdata")))
+  load(file = file.path(input_raw, paste0("sim_",fname, ".Rdata")))
+  # idenfitied landmarks by BayesLASA
   L_list = apply(data$ppi[-nrow(data$ppi),], 1, function(x) {which(x != 0)})
+  # normalized polygonal chain
   normalized = pc_normalizor(data$raw_data[,c(1, 2)])
   pc = normalized$pc
   perim = normalized$length
@@ -38,8 +42,9 @@ for(fname in ffs) {
   n = nrow(pc)
   alpha_sigma = 3
   beta_sigma = 1/n
-  #split di by segments defined by landmarks
+  #true siam
   sigma_true = data$raw_data[,4]
+  # infer sigma
   sigma_mat = lapply(L_list, function(xx){
     P.reduce = PointOnReducedP(xx-1, pc)
     di = get_di(pc, P.reduce, open = T)
@@ -114,6 +119,6 @@ p = p+scale_x_continuous(name="Index", breaks = c(1, 50, 100, 150)) +
         strip.background=element_rect(colour="grey", 
                                       fill="grey"),
         panel.border =element_rect(size=1, fill=NA)) 
-pdf(file= file.path(fig.output, "Fig_S3.pdf"), width = 10, height = 3.5)
+pdf(file= file.path(fig.output, "figure_s3.pdf"), width = 10, height = 3.5)
 print(p)
 dev.off()

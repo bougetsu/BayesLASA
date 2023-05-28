@@ -1,5 +1,6 @@
 #***********************************************
 #* Survival analysis of lung cancer study
+#* read the calculated roughness measurement based on BayesLASA output
 #* Fig. 6a KM plot for high-vs low-risk group patients 
 #* predicted by Ra roughness measurement
 #***********************************************

@@ -1,5 +1,6 @@
 #***********************************************
 #*Fig.5 example of lung cancer case study
+#*read the processed tumor region data and BayesLASA output
 #*1. plot example of tumor region of pathology images
 #*2. plot landmark identified by BayesLASA
 #*3. plot histogram of roughness measurement Ra
