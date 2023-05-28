@@ -1,5 +1,8 @@
 #######################################################################
-## Fig.S10-S15 Application case of United States maps
+##*  Fig.S10-S15 Application case of United States maps
+##* 1. read the raw data
+##* 2. run BayesLASA
+##* 3. plot identified landmarks based on BayesLASA output
 #######################################################################
 library(latex2exp)
 library(ggplot2)
@@ -10,11 +13,12 @@ library(mcclust)
 #*file path
 #***************
 input = "manuscript_reproducibility/data/real_data_us_state/"
+input_raw = "data/real_data_us_state/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
 code_path <- "code/"
 
 #* raw data
-load(file.path(input, "states_outline.Rdata"), verbose = T)
+load(file.path(input_raw, "states_outline.Rdata"), verbose = T)
 state_list = names(outline_polygon)
 state_pns = unlist(lapply(outline_polygon, nrow))
 
@@ -32,7 +36,7 @@ state_pns = unlist(lapply(outline_polygon, nrow))
 # source(file.path(code_path,"landmark_detection/sim_polygon_guassian.R"))
 # sourceCpp(file.path(code_path,"landmark_detection/MCMC_shape.cpp"))
 
-# load(file.path(input, "states_outline.Rdata"), verbose = T)
+# load(file.path(input_raw, "states_outline.Rdata"), verbose = T)
 # state_list = names(outline_polygon)
 # state_pns = unlist(lapply(outline_polygon, nrow))
 # for(mm in 1:length(state_list)){
@@ -172,7 +176,7 @@ pcs = pcs %>%
          state_pn = paste0("(n = ",state_pns[state_ind], ")"),
          state_label = paste0(state, "\n", state_pn))
 
-pdf(file.path(fig.output, paste0("Fig_S10-S15.pdf")), height = 14, width = 10)
+pdf(file.path(fig.output, paste0("figure_s10-s15.pdf")), height = 14, width = 10)
 for(i in 1:length(stat_ind_list)){
   ind = stat_ind_list[[i]]
   landmarks_plot2 = landmarks_plot %>% filter(state_ind %in% ind, Method == "MAP")

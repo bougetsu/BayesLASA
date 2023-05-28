@@ -1,5 +1,6 @@
 ###################################################################################
-## Fig.S9 Comparison of runtime of ALDUQ and BayesLASA on simutalted dataset
+##*  Fig.S9 Comparison of runtime of ALDUQ and BayesLASA on simutalted dataset
+##* read the recorded run time of each method and plot
 #################################################################################
 library(dplyr)
 library(ggpubr)
@@ -29,4 +30,4 @@ p_time = ggline(tb_time, x = "K", y = "elapse", color = "Method",
               add =c("mean_se", "boxplot"), error.plot = "linerange",
               ylab = "Runtime (s)", 
               palette = c("#FC4E07", "#00AFBB")) 
-ggsave(p_time, file = file.path(fig.output, paste0("Fig_S9.pdf")), width = 10, height = 5)
+ggsave(p_time, file = file.path(fig.output, paste0("figure_s9.pdf")), width = 10, height = 5)

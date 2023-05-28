@@ -1,3 +1,11 @@
+###################################################################################
+##* Fig.S6
+##* read the simulated data
+##* run BayesLASA
+##* plot the estimated # of landmkars K_hat vs different
+##*  BayesLASA prior of beta_sigma or ALDUQ prior lambda
+#################################################################################
+
 ##load pkgs
 
 library(doParallel)
@@ -13,6 +21,7 @@ source("code/toolbox/functions.R")
 #*file path
 #***************
 input <- "manuscript_reproducibility/data/simulated_data/"
+input_raw <- "data/simulated_data/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
 
 
@@ -27,15 +36,15 @@ library(Rcpp)
 sourceCpp("code/landmark_detection/MCMC_shape.cpp")
 # #### Reading simulated data
 # # K = 4
-# load(file.path(input, "Polygon", "Normal_4_equil_FALSE_pn_100_seed_1.Rdata"))
+# load(file.path(input_raw, "Normal_4_equil_FALSE_pn_100_seed_1.Rdata"))
 # sim1 <- as.data.frame(polyg$original_dat)
 # 
 # # K = 5
-# load(file.path(input, "Polygon", "Normal_5_equil_TRUE_pn_100_seed_1.Rdata"))
+# load(file.path(input_raw, "Normal_5_equil_TRUE_pn_100_seed_1.Rdata"))
 # sim2 <- as.data.frame(polyg$original_dat)
 # 
 # # K = 6
-# load(file.path(input, "Polygon", "Normal_6_equil_TRUE_pn_100_seed_1.Rdata"))
+# load(file.path(input_raw, "Normal_6_equil_TRUE_pn_100_seed_1.Rdata"))
 # sim3 <- as.data.frame(polyg$original_dat)
 # 
 # # K = 4, 5, 6 (keep changing simulated data for different K)
@@ -210,7 +219,7 @@ sourceCpp("code/landmark_detection/MCMC_shape.cpp")
 load(file.path(input, "K_prior_convergence.RData"))
 # Simulation K = 4 Convergence plot
 
-pdf(file.path(fig.output, "Fig_S6.pdf"), width = 11, height = 5)
+pdf(file.path(fig.output, "figure_s6.pdf"), width = 11, height = 5)
 
 par(mfrow = c(1, 3))
 par(mar = c(5, 5, 5, 3))

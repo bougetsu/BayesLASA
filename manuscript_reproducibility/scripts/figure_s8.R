@@ -1,5 +1,9 @@
 #######################################################################
-## Fig.S7-S8 Sensitivity analysis of simulated polygons
+##* Fig.S7-S8 Sensitivity analysis of simulated polygons
+##* 1. read the simulated data
+##* 2. perform BayesLASA
+##* 3. calculate MCC and ARI
+##* 4. plot MCC, ARI, TPR and FPR
 #######################################################################
 library(RColorBrewer )
 library(corrplot)
@@ -8,6 +12,7 @@ library(corrplot)
 #*file path
 #***************
 input = "manuscript_reproducibility/data/simulated_data/"
+input_raw = "data/simulated_data/"
 code_path <- "code/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
 
@@ -24,7 +29,7 @@ source(file.path(code_path,"toolbox/functions.R"))
 # library(doParallel)
 # library(foreach)
 # registerDoParallel(4)
-# source(file.path(code_path,"landmark_detection/sim_polygon_guassian.R"))
+# source(file.path(code_path,"landmark_detection/sim_polygon_gaussian.R"))
 # sourceCpp(file.path(code_path,"landmark_detection/MCMC_shape.cpp"))
 
 # tm_df = NULL
@@ -86,11 +91,10 @@ source(file.path(code_path,"toolbox/functions.R"))
 
 
 
-# Calculate MCC and ARI  -------
+# Calculate MCC, ARI, TPR and FPR  -------
 ####################################################################################
-##** NOTE: It takes a while to run the MCMC
+##** NOTE: It takes a while to calculated the MCC, ARI, TPR and FPR
 ##** Results are already saved in the 'manuscript_reproducibility/data/simulated_data//Sensitivity'
-##** uncomment the below code section to re-run in needed.
 ####################################################################################
 
 ff = dir(file.path(input, "Sensitivity"), pattern = "Sensitivity_L.Rdata")
@@ -99,7 +103,7 @@ for(f in ff){
   ##load BayesLASA result
   load(file = file.path(input, "Sensitivity", f), verbose = T)
   ##load original data
-  load(file = file.path(input, "Polygon", paste0(fname, ".Rdata")), verbose = T)
+  load(file = file.path(input_raw, paste0(fname, ".Rdata")), verbose = T)
   
   ####################
   ##get true L and gamma
@@ -120,7 +124,7 @@ for(f in ff){
     estK = data$estK
     res_tb = data.frame(sample = fname, beta_sigma = beta_sigma, estK = estK,
                         method = c("PPM", "PPM_window5", 
-                                                   "PPI", "PPI_window5"),
+                                   "PPI", "PPI_window5"),
                         MCC = numeric(4), ARI = numeric(4),
                         TPR = numeric(4), FPR = numeric(4))
     
@@ -132,7 +136,7 @@ for(f in ff){
     gamma_ppm[L_ppm] = 1
     MCC_ppm = L2mcc(gamma_true, L_ppm)
     ARI_ppm = L2adj(gamma_true, L_ppm)
-
+    
     
     res_tb[res_tb$method == "PPM","MCC"] = MCC_ppm
     res_tb[res_tb$method == "PPM","ARI"] = ARI_ppm
@@ -157,7 +161,7 @@ for(f in ff){
     FPR_ppm_5 = L2FPR(gamma_true, L_ppm_5)
     res_tb[res_tb$method == "PPM_window5","TPR"] = TPR_ppm_5
     res_tb[res_tb$method == "PPM_window5","FPR"] = FPR_ppm_5
-  
+    
     
     ####################
     ###ppi
@@ -224,23 +228,19 @@ for(f in ff){
             quote = F, row.names = F)
 }
 
-# Load MCC and ARI and plot -------
+# Load TPR FPR and plot -------
 
 ##* load data
 ff = dir(file.path(input, "Sensitivity"), pattern = "_summary_coef.csv")
 
 sensitivity_tb = do.call(rbind,
-          lapply(file.path(input, "Sensitivity", ff), function(x) read.csv(x, stringsAsFactors = F)))
+                         lapply(file.path(input, "Sensitivity", ff), function(x) read.csv(x, stringsAsFactors = F)))
 
 sensitivity_tb2 = sensitivity_tb  %>%
   group_by(beta_sigma, estK, method) %>%
   summarise(MCC = mean(MCC), ARI = mean(ARI), TPR = mean(TPR), FPR = mean(FPR))
 
 mat = sensitivity_tb2 %>% filter(method == "PPM_window5" )
-mat1 = xtabs(MCC~beta_sigma+estK, mat)
-mat1 = mat1[c(2, 1, 3, 4, 5),]
-mat2 = xtabs(ARI~beta_sigma+estK, mat)
-mat2= mat2[c(2, 1, 3, 4, 5),]
 
 mat_tpr = xtabs(TPR~beta_sigma+estK, mat)
 mat_tpr = mat_tpr[c(2, 1, 3, 4, 5),]
@@ -249,32 +249,10 @@ mat_fpr = mat_fpr[c(2, 1, 3, 4, 5),]
 
 
 ##* make plot
-pdf(file = file.path(fig.output, paste0("Fig_S7_MCC.pdf")), width = 4.1, height = 4)
-corrplot(mat1, method="circle", col = c(colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100),
-                                        colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)),
-         is.corr = FALSE, cl.lim = c(0, 1),
-         addCoef.col = "black", # Add coefficient of correlation,
-         addgrid.col = "grey90",
-         tl.col="black"
-)
-dev.off()
 
-
-pdf(file = file.path(fig.output, paste0("Fig_S7_ARI.pdf")), width = 4.1, height = 4)
-corrplot(mat2, method="circle", col = c(colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100),
-                                        colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)),
-         is.corr = FALSE, cl.lim = c(0, 1),
-         addCoef.col = "black", # Add coefficient of correlation,
-         addgrid.col = "grey90",
-         tl.col="black"
-)
-dev.off()
-
-
-
-pdf(file = file.path(fig.output, paste0("Fig_S8_TPR.pdf")), width = 4.1, height = 4)
+pdf(file = file.path(fig.output, paste0("figure_s8a.pdf")), width = 4.1, height = 4)
 corrplot(mat_tpr, method="circle", col = c(colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100),
-                                        colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)),
+                                           colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100)),
          is.corr = FALSE, cl.lim = c(0, 1),
          addCoef.col = "black", # Add coefficient of correlation,
          addgrid.col = "grey90",
@@ -284,7 +262,7 @@ dev.off()
 
 
 #* the two FPR plots were overlayed to get the final one
-pdf(file = file.path(fig.output, paste0("Fig_S8_FPR.pdf")), width = 4.1, height = 4)
+pdf(file = file.path(fig.output, paste0("figure_s8b.pdf")), width = 4.1, height = 4)
 corrplot(1-mat_fpr, method="circle", col = rev(c(colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100),
                                                  colorRampPalette(rev(brewer.pal(n = 7, name ="RdYlBu")))(100))),
          is.corr = FALSE, cl.lim = c(0, 1),
