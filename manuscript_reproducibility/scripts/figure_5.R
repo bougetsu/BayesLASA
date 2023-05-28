@@ -1,5 +1,8 @@
 #***********************************************
 #*Fig.5 example of lung cancer case study
+#*1. plot example of tumor region of pathology images
+#*2. plot landmark identified by BayesLASA
+#*3. plot histogram of roughness measurement Ra
 #***********************************************
 library(dplyr)
 library(ggpubr)
@@ -9,7 +12,7 @@ library(ggpubr)
 #***************
 input = "manuscript_reproducibility/data/real_data_pathology_images/"
 fig.output = "manuscript_reproducibility/figures_and_tables/"
-data.loc =  file.path(input, "Processed")
+data.loc =  "data/real_data_pathology_images"
 rdatloc = file.path(input, "BayesLASA")
 
 ##* load roughness
@@ -55,9 +58,9 @@ p_g_density = Roughness %>% filter(sample == sg) %>%
         panel.background = element_rect(colour = "black", size=0.8)) +
   xlim(c(0, 8))
 
-ggsave(file.path(fig.output, "Fig_5a_GoodPrognosis_TumorRegion.pdf"), p_g1, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig_5b_GoodPrognosis_TumorLandmak.pdf"), p_g2, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig_5c_GoodPrognosis_density.pdf"), p_g_density, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5a.pdf"), p_g1, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5b.pdf"), p_g2, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5c.pdf"), p_g_density, width = 4, height = 4)
 
 
 ##* poor 10127
@@ -97,7 +100,7 @@ p_p_density = Roughness %>% filter(sample == sp) %>%
         panel.background = element_rect(colour = "black", size=0.8)) +
   xlim(c(0, 8))
 
-ggsave(file.path(fig.output, "Fig_5d_PoorPrognosis_TumorRegion.pdf"), p_p1, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig_5e_PoorPrognosis_TumorLandmak.pdf"), p_p2, width = 4, height = 4)
-ggsave(file.path(fig.output, "Fig_5f_PoorPrognosis_density.pdf"), p_p_density, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5d.pdf"), p_p1, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5e.pdf"), p_p2, width = 4, height = 4)
+ggsave(file.path(fig.output, "figure_5f.pdf"), p_p_density, width = 4, height = 4)
 
