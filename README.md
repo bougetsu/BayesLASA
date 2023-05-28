@@ -13,10 +13,12 @@ Here is a simple demo on how to use BayesLASA for landmark identification.
   * `landmark_detection/sim_polygon_gaussian.R`: function to generate simulated polygons
   
   * `toolbox/functions.R`: utilized functions for related analysis
-  
-* `manuscript_reproducibility`: files to reproduce the analysis in the BayesLASA manuscript
 
 * `demo`: toy dataset for BayesLASA function demo
+
+* `data`: input raw data for the four application cases in the BayesLASA manuscript
+  
+* `manuscript_reproducibility`: files to reproduce the analysis in the BayesLASA manuscript
 
 
 #### Landmark identification function
@@ -26,7 +28,7 @@ Here is a simple demo on how to use BayesLASA for landmark identification.
 Usage:
 
 ```{r}
-MCMC_shape(dat,  iter = n,  estK = est.K, gamma_i = gamma_i, alpha_sigma = 3, beta_sigma = beta_sigma, ppm_store = T)
+MCMC_shape(dat,  iter = 10000,  estK = 4, gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1), updateGp = c(0.8, 0.1, 0.1), alpha_sigma = 3, beta_sigma = 0.01, ppm_store = TRUE)
 
 ####################
 # input argument
