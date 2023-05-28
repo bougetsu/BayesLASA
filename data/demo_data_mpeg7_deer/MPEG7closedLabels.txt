@@ -1,0 +1,73 @@
+Labels for MPEG-7 data
+Each shape class has 20 observations, e.g.:
+a bone can be chosen using C_cl(:,:,i) for some i from 1 to 20
+a comma can be chosen using C_cl(:,:,j) for some j from 21 to 40
+etc.
+Each curve consists of 101 discretization points; all curves in this
+dataset are closed, so C_cl(:,1,:) = C_cl(:,101,:) for all curves here.
+
+1: bone
+2: comma
+3: half circle
+4: heart
+5: misk
+6: apple
+7: bat
+8: beetle
+9: bell
+10: bird
+11: bottle
+12: brick
+13: butterfly
+14: camel
+15: car
+16: carriage
+17: cattle
+18: cell phone
+19: child
+20: chopper
+21: classic car
+22: crown
+23: cup
+24: deer
+25: flower 5 petals
+26: flower 6 petals
+27: flower 7 petals
+28: four corners
+29: three corners
+30: cross
+31: five corners
+32: flower 10 petals
+33: letter T
+34: circle
+35: dog
+36: elephant
+37: face
+38: fish 1
+39: fish 2
+40: fly
+41: fork
+42: fountain
+43: guitar
+44: hammer
+45: hat
+46: horse
+47: horseshoe
+48: jar
+49: key
+50: lizard
+51: fish 3
+52: octopus
+53: pencil
+54: personal car
+55: pocket
+56: stingray
+57: sea snake
+58: shoe
+59: spoon
+60: spring
+61: teddy bear
+62: tree
+63: truck
+64: turtle
+65: watch
