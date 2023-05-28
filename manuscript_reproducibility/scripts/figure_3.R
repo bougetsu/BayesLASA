@@ -1,6 +1,7 @@
 #************************************************
 #*Fig. 3. Simulated study, 
 #*example polygonal chain with identified landmarks
+#*landmarks were identified by BayesLASA, ALDUQ and convex hull
 #***********************************************
 
 library(dplyr)
