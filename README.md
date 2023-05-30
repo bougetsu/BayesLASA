@@ -82,10 +82,24 @@ library(R.matlab)
 sourceCpp("code/landmark_detection/MCMC_shape.cpp")
 source("code/toolbox/functions.R")
 
+set.seed(9080)
+
+## Load packages
+library(mcclust) 
+library(Rcpp)
+library(doParallel)
+library(foreach)
+registerDoParallel(4)
+library(R.matlab)
+
+## Load functions
+sourceCpp("code/landmark_detection/MCMC_shape.cpp")
+source("code/toolbox/functions.R")
+
 ## Read deer dataset
 f = "demo/MPEG7closed.mat"
 mdat <- readMat(f)$C.cl
-k = 461 #deer shape
+k = 461 # Number of vertices in deer shape
 pc = cbind(mdat[1,,k], mdat[2,,k])
 
 ## Preprocess data and scale
@@ -102,9 +116,9 @@ beta_sigma <- 0.001
 
 ## 4 MCMC chains
 res = foreach(i = 1:4) %dopar%{
-  #generate gamma_0
+  # Generate gamma_0
   gamma_i = generate_gamma(n, est.K)
-  #run MCMC
+  # Run MCMC in parallel
   MCMC_shape(dat,  iter = n*fold,  estK = est.K, gamma_i = gamma_i,
              alpha_sigma = 3, beta_sigma = beta_sigma, ppm_store = T)
 }
@@ -117,7 +131,7 @@ for(i in 1:4){
   ppm = ppm+res[[i]]$ppm
   if(max(res[[i]]$posteriors) > current_post){
     current_post = max(res[[i]]$posteriors)
-    L_map = which(res[[i]]$gamma_map > 0) # select map based on posteriors
+    L_map = which(res[[i]]$gamma_map > 0) # Select MAP based on posteriors
   }
 }
 
@@ -146,7 +160,6 @@ p_deer = ggscatter(landmarks, x = "x", y = "y", color = "#FC4E07", size = 2, sha
                                       fill="grey"), panel.border =element_rect(fill=NA))
 p_deer
 ggsave("demo/deer_application.png")
-
 ```
 ![BayesLASA applied to a complex shape (deer) from MPEG-7](demo/deer_application.png)
 
