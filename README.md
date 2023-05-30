@@ -17,16 +17,28 @@ Bayesian Landmark-based Shape Analysis (BayesLASA) is a framework for landmark d
 Below, we demonstrate the usage of BayesLASA for landmark identification on the MPEG-7 dataset. The core landmark detection functionality is performed by the `MCMC_shape` function in `code/landmark_detection/MCMC_shape.cpp`.
 
 ```{r}
-MCMC_shape(dat,  iter = 10000, estK = 4, gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1), updateGp = c(0.8, 0.1, 0.1), alpha_sigma = 3, beta_sigma = 0.01, ppm_store = TRUE)
+####################
+# Main function:
+#
+# MCMC_shape(dat, 
+#           iter = 10000, 
+#           estK = 4, 
+#           gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1), 
+#           updateGp = c(0.8, 0.1, 0.1), 
+#           alpha_sigma = 3, 
+#           beta_sigma = 0.01, 
+#           ppm_store = TRUE,
+#           open = FALSE)
+####################
 
 ####################
-# Required arguments
+# Required arguments:
 #
 # dat: matrix - a polygonal chain
 # iter: numerical scalar - number of MCMC iterations (default = 100 * n, where n is total number of points in the chain)
 # estK: integer - estimated number of landmark points (default = 3)
-# gamma_i: integer vector - initial gamma, if not speficifed, will generate a random one
-# updateGp: numerical vector - probability vector for updating gamma, following the pattern c("add-or-delete", "swap",  "shift"), where the vector sum must be 1 (default = c(0.8, 0.1, 0.1)); to fix K, set the first probability value to 0
+# gamma_i: integer vector - initial gamma (default = random)
+# updateGp: numerical vector - probability vector for updating gamma (default = c(0.8, 0.1, 0.1), following the pattern c("add-or-delete", "swap",  "shift") where the vector sum must be 1; to fix K, set the first probability value to 0)
 # alpha_sigma: numerical scalar (default = 3)
 # beta_sigma: numerical scalar (default = 1/n for normalized chain)
 # ppm_store: boolean - returns PPM matrix if TRUE
@@ -34,7 +46,7 @@ MCMC_shape(dat,  iter = 10000, estK = 4, gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1),
 ####################
 
 ####################
-# Function output
+# Function output:
 #
 # res: List - iter: total number of MCMC iterations,
 #             burn: number of iterations for burn-in, 
@@ -57,7 +69,8 @@ The [MPEG-7 dataset](http://www.dabi.temple.edu/∼shape/MPEG7/dataset.html) is 
 
 ```{r}
 set.seed(9080)
-##load pkgs
+
+## Load packages
 library(mcclust) 
 library(Rcpp)
 library(doParallel)
@@ -65,28 +78,29 @@ library(foreach)
 registerDoParallel(4)
 library(R.matlab)
 
+## Load functions
 sourceCpp("code/landmark_detection/MCMC_shape.cpp")
 source("code/toolbox/functions.R")
 
-##*  read deer dataset
+## Read deer dataset
 f = "demo/MPEG7closed.mat"
 mdat <- readMat(f)$C.cl
 k = 461 #deer shape
 pc = cbind(mdat[1,,k], mdat[2,,k])
 
-##* pre-process data, scale
+## Preprocess data and scale
 temp = pc_normalizor(pc)
 dat = temp$pc;
 dat = dat[-nrow(dat),]
 n = nrow(dat)
 
-##* set hyper parameter and algorithm setting
+## Set hyperparameters and algorithm arguments
 fold = 100
 est.K = round(n/100)
 if(est.K <3){est.K = 3}
 beta_sigma <- 0.001 
 
-##* 4 MCMC chains
+## 4 MCMC chains
 res = foreach(i = 1:4) %dopar%{
   #generate gamma_0
   gamma_i = generate_gamma(n, est.K)
@@ -95,7 +109,7 @@ res = foreach(i = 1:4) %dopar%{
              alpha_sigma = 3, beta_sigma = beta_sigma, ppm_store = T)
 }
 
-##* post infer
+## Posterior inference
 burnin = res[[1]]$burn
 iter = res[[1]]$iter
 ppm <- matrix(0, 100, 100)
@@ -109,14 +123,15 @@ for(i in 1:4){
 
 ppm = ppm/4
 z_ppm <- minbinder(ppm, method = "comp")$cl
-##* landmar points position
+
+## Get landmark positions
 L_ppm = which(diff(c(z_ppm[n], z_ppm)) != 0)
 
-##* plot
+## Plot deer shape with landmarks
 pc <- as.data.frame(dat)
 colnames(pc) <- c("x", "y")
-landmark_ppm <- pc[L_ppm,] %>% mutate(method = "BasyesLASA (PPM)")
-landmark_map <- pc[L_map,] %>% mutate(method = "BasyesLASA (MAP)")
+landmark_ppm <- pc[L_ppm,] %>% mutate(method = "BayesLASA (PPM)")
+landmark_map <- pc[L_map,] %>% mutate(method = "BayesLASA (MAP)")
 landmarks <- landmark_ppm %>%
   rbind(landmark_map)
 

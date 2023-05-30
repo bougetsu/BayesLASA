@@ -1,22 +1,22 @@
 //////////////
-//MCMC
-//Cong Zhang
-//MCMC for shape analysis
-//usage: MCMC_shape(NumericMatrix dat, int iter, int estK = 4, Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
+// MCMC
+// Cong Zhang
+// MCMC for shape analysis
+// usage: MCMC_shape(NumericMatrix dat, int iter, int estK = 4, Rcpp::Nullable<Rcpp::IntegerVector> gamma_i = R_NilValue, 
 //                      NumericVector updateGp = NumericVector::create(0.8, 0.1, 0.1),
 //                        double alpha_sigma = 2, double beta_sigma = 0.01, 
 //                        String kernel = "normal", 
 //                        bool open = false, 
 //                        bool ppm_store = false)
 ////////////////////////////////
-//to get posterior given gamma
-//usge: compute_posterior(NumericMatrix dat,  IntegerVector gamma_0, int estK = 4,
+// to get posterior given gamma
+// usage: compute_posterior(NumericMatrix dat,  IntegerVector gamma_0, int estK = 4,
 //                  double alpha_sigma = 3, double beta_sigma = 0.02)
 ////////////////////////////////
 // added feature:
 //    1. check if proposed gamma make polygon intersect
 //    2. from L to ppm more quickly
-//    3. add option of ppm_store for if calculate and return ppn during MCMC
+//    3. add option of ppm_store for if calculate and return ppm during MCMC
 ////////////////////////////////
 
 
