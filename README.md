@@ -1,67 +1,59 @@
-# BayesLASA
+# Bayesian Landmark-based Shape Analysis (BayesLASA)
 
-We proposed a framework called Bayesian Landmark-based Shape Analysis (BayesLASA) for landmark detection in polygonal chain data.
+## Introduction
+Bayesian Landmark-based Shape Analysis (BayesLASA) is a framework for landmark detection in polygonal chain data. Given a polygonal chain, BayesLASA will identify and extract landmark points using Bayesian inference.
 
-Here is a simple demo on how to use BayesLASA for landmark identification.
+## Directory structure
 
-### Content
+* `code`:
+  * `landmark_detection/MCMC_shape.cpp`: The BayesLASA function
+  * `landmark_detection/sim_polygon_gaussian.R`: Functions for generating simulated polygons
+  * `toolbox/functions.R`: Auxiliary functions for related analyses
+* `demo`: Demo dataset for BayesLASA
+* `data`: The four datasets to which BayesLASA was applied in the BayesLASA manuscript
+* `manuscript_reproducibility`: Files to reproduce the analysis in the BayesLASA manuscript
 
-* `code`: codes for BayesLASA
-
-  * `landmark_detection/MCMC_shape.cpp`: BayesLASA function
-  
-  * `landmark_detection/sim_polygon_gaussian.R`: function to generate simulated polygons
-  
-  * `toolbox/functions.R`: utilized functions for related analysis
-
-* `demo`: toy dataset for BayesLASA function demo
-
-* `data`: input raw data for the four application cases in the BayesLASA manuscript
-  
-* `manuscript_reproducibility`: files to reproduce the analysis in the BayesLASA manuscript
-
-
-#### Landmark identification function
-
-`MCMC_shape` function in `code/landmark_detection/MCMC_shape.cpp`
-
-Usage:
+## Usage
+Below, we demonstrate the usage of BayesLASA for landmark identification on the MPEG-7 dataset. The core landmark detection functionality is performed by the `MCMC_shape` function in `code/landmark_detection/MCMC_shape.cpp`.
 
 ```{r}
-MCMC_shape(dat,  iter = 10000,  estK = 4, gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1), updateGp = c(0.8, 0.1, 0.1), alpha_sigma = 3, beta_sigma = 0.01, ppm_store = TRUE)
+MCMC_shape(dat,  iter = 10000, estK = 4, gamma_i = c(1, 0, 0, 1, 0, 1, 0, 0, 1), updateGp = c(0.8, 0.1, 0.1), alpha_sigma = 3, beta_sigma = 0.01, ppm_store = TRUE)
 
 ####################
-# input argument
+# Required arguments
 #
-# dat: matrix, polygonal chain
-# iter: numerical scalar, interations for MCMC, default = 100*n, where n is total number of points in the chain.
-# estK: integer, estimated number of landmark points, default = 3
-# gamma_i: integer vector. initial gamma, if not speficifed, will generate a random one
-# updateGp: numerical vector. probability vector for gamma updating method, and the order is c("add or delete", "swap",  "shift").
-#           default = c(0.8, 0.1, 0.1). The sum need to be 1. 
-#           If the user would like to fixed the number of K, set the first probability value to 0.
-# alpha_sigma: numerical scalar, default = 3
-# beta_sigma: numerical scalar, default = 1/n for normalized chain
-# ppm_store: boolen, if return the ppm matrix
-# open: boolen, if the polygonal chain is open, default = False
-# 
-# output: list, iter: total iteration numbers, burn: burn-in numbers, gamma_map: map gamma value,
-#                           gamma_map_index: position index of map gamma, 
-#                           Llist: list of Ls in each iteration,
-#                           hastings: difference in posterior values in each iteration,,
-#                           posteriors: posterior values in each iteration, 
-#                           Ks: K in each iteraction,
-#                           accept_r_ad: accepting rate of new poposed gamma by add-or-delete,
-#                           accept_r_swap: accepting rate of new poposed gamma by swap,
-#                           accept_r_shift: accepting rate of new poposed gamma by shipt,
-#                           larger_lklh: if new MCMC interation has larger posterior)
-# 
+# dat: matrix - a polygonal chain
+# iter: numerical scalar - number of MCMC iterations (default = 100 * n, where n is total number of points in the chain)
+# estK: integer - estimated number of landmark points (default = 3)
+# gamma_i: integer vector - initial gamma, if not speficifed, will generate a random one
+# updateGp: numerical vector - probability vector for updating gamma, following the pattern c("add-or-delete", "swap",  "shift"), where the vector sum must be 1 (default = c(0.8, 0.1, 0.1)); to fix K, set the first probability value to 0
+# alpha_sigma: numerical scalar (default = 3)
+# beta_sigma: numerical scalar (default = 1/n for normalized chain)
+# ppm_store: boolean - returns PPM matrix if TRUE
+# open: boolean - polygonal chain is open if TRUE (default is FALSE)
+####################
+
+####################
+# Function output
+#
+# res: List - iter: total number of MCMC iterations,
+#             burn: number of iterations for burn-in, 
+#             gamma_map: MAP gamma value,
+#             gamma_map_index: position index of MAP gamma, 
+#             Llist: list of Ls in each iteration,
+#             hastings: difference in posterior values in each iteration,
+#             posteriors: posterior values in each iteration, 
+#             Ks: K in each iteration,
+#             accept_r_ad: acceptance rate of new proposed gamma by add-or-delete,
+#             accept_r_swap: acceptance rate of new proposed gamma by swap,
+#             accept_r_shift: acceptance rate of new proposed gamma by shift,
+#             larger_lklh: if new MCMC iteration has larger posterior)
 ####################
 ```
 
 #### Case study
 
-Complex shape example in MPEG-7 benchmark (http://www.dabi.temple.edu/∼shape/MPEG7/dataset.html) computer vision.
+The [MPEG-7 dataset](http://www.dabi.temple.edu/∼shape/MPEG7/dataset.html) is a well-known benchmark dataset used in the development of computer vision techniques. Here, we demonstrate BayesLASA's landmark detection using [a version of MPEG-7 that has been converted to polygonal chains](https://github.com/jd-strait/ALDUQ) by Strait et al. for their work ["Automatic Detection and Uncertainty Quantification of Landmarks on Elastic Curves"](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6781625/). 
 
 ```{r}
 set.seed(9080)
@@ -141,4 +133,11 @@ p_deer
 ggsave("demo/deer_application.png")
 
 ```
-![Application case of complex shape (deer)](demo/deer_application.png)
+![BayesLASA applied to a complex shape (deer) from MPEG-7](demo/deer_application.png)
+
+## Collaborators
+* Cong Zhang
+* Guanghua Xiao
+* Chul Moon
+* Min Chen
+* Qiwei Li
