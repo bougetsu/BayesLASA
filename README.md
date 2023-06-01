@@ -31,6 +31,7 @@ Below, we demonstrate the usage of BayesLASA for landmark identification on the 
 #           open = FALSE)
 ####################
 
+
 ####################
 # Required arguments:
 #
@@ -127,6 +128,7 @@ res = foreach(i = 1:4) %dopar%{
 burnin = res[[1]]$burn
 iter = res[[1]]$iter
 ppm <- matrix(0, 100, 100)
+current_post <- max(res[[1]]$posteriors)
 for(i in 1:4){
   ppm = ppm+res[[i]]$ppm
   if(max(res[[i]]$posteriors) > current_post){
@@ -135,29 +137,36 @@ for(i in 1:4){
   }
 }
 
-ppm = ppm/4
+ppm <- ppm / 4
 z_ppm <- minbinder(ppm, method = "comp")$cl
 
 ## Get landmark positions
 L_ppm = which(diff(c(z_ppm[n], z_ppm)) != 0)
 
+
 ## Plot deer shape with landmarks
 pc <- as.data.frame(dat)
 colnames(pc) <- c("x", "y")
-landmark_ppm <- pc[L_ppm,] %>% mutate(method = "BayesLASA (PPM)")
-landmark_map <- pc[L_map,] %>% mutate(method = "BayesLASA (MAP)")
+landmark_ppm <- pc[L_ppm, ] %>% mutate(method = "BasyesLASA (PPM)")
+landmark_map <- pc[L_map, ] %>% mutate(method = "BasyesLASA (MAP)")
 landmarks <- landmark_ppm %>%
   rbind(landmark_map)
 
-p_deer = ggscatter(landmarks, x = "x", y = "y", color = "#FC4E07", size = 2, shape = 15)+
-  geom_polygon(data = as.data.frame(pc), aes(x = x, y = y), fill = NA, linetype = "solid",
-               size = 0.5, color = "black") +
-  geom_point(data = landmarks, aes(x = x, y = y), colour = "#FC4E07", size = 2, shape = 15)+
-  geom_polygon(data = landmarks, aes(x = x, y = y), colour = "#FC4E07",fill = NA, size = 0.8)+
+p_deer <- ggscatter(landmarks, x = "x", y = "y", color = "#FC4E07", size = 2, shape = 15) +
+  geom_polygon(
+    data = as.data.frame(pc), aes(x = x, y = y), fill = NA, linetype = "solid",
+    size = 0.5, color = "black"
+  ) +
+  geom_point(data = landmarks, aes(x = x, y = y), colour = "#FC4E07", size = 2, shape = 15) +
+  geom_polygon(data = landmarks, aes(x = x, y = y), colour = "#FC4E07", fill = NA, size = 0.8) +
   facet_wrap(~method) +
-  theme(strip.text=element_text(size=12, colour="black"),
-        strip.background=element_rect(colour="grey", 
-                                      fill="grey"), panel.border =element_rect(fill=NA))
+  theme(
+    strip.text = element_text(size = 12, colour = "black"),
+    strip.background = element_rect(
+      colour = "grey",
+      fill = "grey"
+    ), panel.border = element_rect(fill = NA)
+  )
 p_deer
 ggsave("demo/deer_application.png")
 ```
