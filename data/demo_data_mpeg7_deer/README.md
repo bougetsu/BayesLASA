@@ -1,7 +1,6 @@
-### MPEG-7 data
+## MPEG-7 dataset
 
-This folder contains the input data for the analysis of MPEG-7 application case in the manuscript "Bayesian Landmark-based Shape Analysis of Tumor Pathology Images".
+This folder contains the MPEG-7 dataset for testing BayesLASA, as demonstrated in the manuscript "Bayesian Landmark-based Shape Analysis of Tumor Pathology Images".
 
-* `MPEF7closed.mat`: MPEG-7 data in MATLAB data format. A total of 65 shape classed. Each shape class has 20 observations.
-
-* `MPEG7closedLabels.txt`: Detailed data description file.
+* `MPEG7closed.mat`: MPEG-7 polygonal chains in MATLAB variable format, comprising a total of 65 shape classess; each shape class has 20 observations.
+* `MPEG7closedLabels.txt`: A detailed description of the data.
