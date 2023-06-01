@@ -2,7 +2,7 @@
 
 This folder contains the tumor pathology image dataset taken from lung cancer patients for testing BayesLASA, as demonstrated in the manuscript "Bayesian Landmark-based Shape Analysis of Tumor Pathology Images".
 
-Processed polygonal chains of tumor regions taken from 267 pathology images are provided in .Rdata format, as `XXXX_outline.Rdata`. The raw tumor pathology images from the National Lung Screening Trial (NLST) are available at https://cdas.cancer.gov/datasets/nlst/
+Processed polygonal chains of tumor regions taken from 246 pathology images are provided in .Rdata format, as `XXXX_outline.Rdata`. The raw tumor pathology images from the National Lung Screening Trial (NLST) are available at https://cdas.cancer.gov/datasets/nlst/
 
 Each .Rdata file contains:
 
