@@ -78,20 +78,8 @@ library(doParallel)
 library(foreach)
 registerDoParallel(4)
 library(R.matlab)
-
-## Load functions
-sourceCpp("code/landmark_detection/MCMC_shape.cpp")
-source("code/toolbox/functions.R")
-
-set.seed(9080)
-
-## Load packages
-library(mcclust) 
-library(Rcpp)
-library(doParallel)
-library(foreach)
-registerDoParallel(4)
-library(R.matlab)
+library(dplyr)
+library(ggpubr)
 
 ## Load functions
 sourceCpp("code/landmark_detection/MCMC_shape.cpp")
@@ -147,8 +135,8 @@ L_ppm = which(diff(c(z_ppm[n], z_ppm)) != 0)
 ## Plot deer shape with landmarks
 pc <- as.data.frame(dat)
 colnames(pc) <- c("x", "y")
-landmark_ppm <- pc[L_ppm, ] %>% mutate(method = "BasyesLASA (PPM)")
-landmark_map <- pc[L_map, ] %>% mutate(method = "BasyesLASA (MAP)")
+landmark_ppm <- pc[L_ppm, ] %>% mutate(method = "BayesLASA (PPM)")
+landmark_map <- pc[L_map, ] %>% mutate(method = "BayesLASA (MAP)")
 landmarks <- landmark_ppm %>%
   rbind(landmark_map)
 
