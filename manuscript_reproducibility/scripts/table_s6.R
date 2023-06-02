@@ -18,7 +18,7 @@ library(tab)
 #* file path
 #***************
 code_file <- "code/landmark_detection/"
-input <- "manuscript_reproducibility/data/real_data_pathology_images/"
+input <- "manuscript_reproducibility/results/real_data_pathology_images/"
 rdatloc <- file.path(input, "BayesLASA")
 
 fig.output <- "manuscript_reproducibility/figures_and_tables"
