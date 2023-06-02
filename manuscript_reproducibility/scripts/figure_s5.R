@@ -269,7 +269,7 @@ p_ARI <- df_plot %>%
     trim = T, add = "boxplot", x.text.angle = 45,
     palette = c("#FC4E07", "#00AFBB", "#E7B800")
   ) +
-  ylab("MCC") + xlab(NULL) +
+  ylab("ARI") + xlab(NULL) +
   rremove("legend") +
   theme(
     strip.text = element_text(size = 12, colour = "black"),
