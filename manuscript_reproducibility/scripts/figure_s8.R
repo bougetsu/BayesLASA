@@ -2,8 +2,8 @@
 ##* Fig.S8 sensitivity analysis of simulated polygons
 ##* 1. read the simulated data
 ##* 2. perform BayesLASA
-##* 3. calculate MCC and ARI
-##* 4. plot MCC, ARI, TPR and FPR
+##* 3. calculate TPR and FPR
+##* 4. plot TPR and FPR
 ##* The final FPR plot in the manuscript was overlaid using Adobe illustrator for better visualization
 #######################################################################
 library(RColorBrewer)
