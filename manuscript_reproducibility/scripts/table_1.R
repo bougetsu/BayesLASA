@@ -42,9 +42,9 @@ rough <- Roughness %>%
 
 ##* patient info
 ##* get sample from clinical data, use sample name to extract K and di
-load(file.path(input, "clinical_info.Rdata"))
+load(file.path(input, "nlst_clinical_info.Rdata"))
 pat.dat <- data %>%
-  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time_new) %>%
+  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time) %>%
   dplyr::filter(slide_id %in% rough$sample) %>%
   distinct() %>%
   mutate(slide_id = as.numeric(slide_id))
@@ -84,7 +84,7 @@ Ra_tb <- r_tb %>%
   filter(sample %in% ssamples, roughness == "Ra") %>%
   inner_join(pat.dat, by = c("sample" = "slide_id"))
 ##* cox model
-fit_ra <- coxph(Surv(time = survival_time_new, event = dead) ~ mean + sd + kurtosis + skewness + K +
+fit_ra <- coxph(Surv(time = survival_time, event = dead) ~ mean + sd + kurtosis + skewness + K +
   cluster(patient_id) + area + stage + tobacco + female, data = Ra_tb)
 ##* print model
 fit_ra %>% tabcoxph(factor.compression = 1, columns = c("beta", "se", "hr", "hr.ci", "p"))

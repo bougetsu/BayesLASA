@@ -9,6 +9,8 @@ library(ggplot2)
 library(ggpubr)
 library(dplyr)
 library(mcclust)
+source("code/toolbox/functions.R")
+
 #***************
 #* file path
 #***************

@@ -24,10 +24,9 @@ fig.output <- "manuscript_reproducibility/figures_and_tables"
 
 ##* patient info
 ##* get sample from clinical data, use sample name to extract K and di
-load(file.path(input, "clinical_info.Rdata"))
+load(file.path(input, "nlst_clinical_info.Rdata"))
 pat.dat <- data %>%
-  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time_new) %>%
-  dplyr::filter(slide_id %in% rough$sample) %>%
+  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time) %>%
   distinct() %>%
   mutate(slide_id = as.numeric(slide_id))
 
@@ -56,7 +55,7 @@ tb_tumor_rough <-
 
 tbr_tb <- areas %>%
   group_by(sample) %>%
-  filter(area == max(area), sample %in% ssamples) %>%
+  filter(area == max(area)) %>%
   dplyr::select(sample, shape, area) %>%
   left_join(tb_tumor_rough, by = "sample")
 
@@ -64,9 +63,9 @@ param <- unique(tbr_tb$L)
 df_tbr <- list()
 for (l in param) {
   tmp <- tbr_tb %>%
-    filter(sample %in% ssamples, L == l) %>%
+    filter(L == l) %>%
     inner_join(pat.dat, by = c("sample" = "slide_id"))
-  formula <- paste0("Surv(time = survival_time_new, event = dead) ~ tb_roughness+cluster(patient_id)+area+stage+tobacco+female")
+  formula <- paste0("Surv(time = survival_time, event = dead) ~ tb_roughness+cluster(patient_id)+area+stage+tobacco+female")
   fit.coxph1 <- coxph(as.formula(formula), data = tmp)
   a <- summary(fit.coxph1)$coef
   if (ncol(a) > 5) {

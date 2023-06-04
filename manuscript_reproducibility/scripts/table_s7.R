@@ -42,10 +42,9 @@ rough <- Roughness %>%
 
 ##* patient info
 ##* get sample from clinical data, use sample name to extract K and di
-load(file.path(input, "clinical_info.Rdata"))
+load(file.path(input, "nlst_clinical_info.Rdata"))
 pat.dat <- data %>%
-  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time_new) %>%
-  dplyr::filter(slide_id %in% rough$sample) %>%
+  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time) %>%
   distinct() %>%
   mutate(slide_id = as.numeric(slide_id))
 
@@ -131,7 +130,7 @@ HMM_p2n_tb <- Transition_tb %>%
   filter(HMM == "pos2neg", model == "gaussian") %>%
   inner_join(pat.dat, by = c("sample" = "slide_id"))
 
-fit_hmm_p2n <- coxph(Surv(time = survival_time_new, event = dead) ~ mean + sd + kurtosis + skewness + K +
+fit_hmm_p2n <- coxph(Surv(time = survival_time, event = dead) ~ mean + sd + kurtosis + skewness + K +
   cluster(patient_id) + area + stage + tobacco + female, data = HMM_p2n_tb)
 fit_hmm_p2n %>%
   tabcoxph(factor.compression = 1, columns = c("beta", "se", "hr", "hr.ci", "p")) %>%

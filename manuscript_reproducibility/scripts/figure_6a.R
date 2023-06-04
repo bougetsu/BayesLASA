@@ -42,9 +42,9 @@ rough <- Roughness %>%
 
 ##* patient info
 ##* get sample from clinical data, use sample name to extract K and di
-load(file.path(input, "clinical_info.Rdata"))
+load(file.path(input, "nlst_clinical_info.Rdata"))
 pat.dat <- data %>%
-  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time_new) %>%
+  dplyr::select(patient_id, slide_id, dead, stage, female, tobacco, survival_time) %>%
   dplyr::filter(slide_id %in% rough$sample) %>%
   distinct() %>%
   mutate(slide_id = as.numeric(slide_id))
@@ -83,9 +83,9 @@ tt <- Ks %>%
 n <- nrow(Ra_tb)
 risk <- numeric(n)
 for (i in 1:n) {
-  ## survival_time_new is defined as the time between biopsy and death or the end of study, which comes first
+  ## survival_time is defined as the time between biopsy and death or the end of study, which comes first
   fit <- coxph(
-    Surv(time = survival_time_new, event = dead) ~ mean + sd + kurtosis + skewness + K +
+    Surv(time = survival_time, event = dead) ~ mean + sd + kurtosis + skewness + K +
       cluster(patient_id) + area + stage + tobacco + female,
     data = Ra_tb[-i, ]
   )
@@ -93,8 +93,8 @@ for (i in 1:n) {
 }
 Ra_tb$risk_group <- ifelse(risk >= median(risk, na.rm = T), "high", "low")
 
-fit_ra_risk <- survfit(Surv(survival_time_new, dead) ~ risk_group, data = Ra_tb)
-logrank <- survdiff(Surv(survival_time_new, dead) ~ risk_group, data = Ra_tb)
+fit_ra_risk <- survfit(Surv(survival_time, dead) ~ risk_group, data = Ra_tb)
+logrank <- survdiff(Surv(survival_time, dead) ~ risk_group, data = Ra_tb)
 psurve_ra <- ggsurvplot(fit_ra_risk,
   pval = T, conf.int = T,
   legend.title = "Predicted risk",
