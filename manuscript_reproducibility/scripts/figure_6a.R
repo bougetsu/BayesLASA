@@ -79,6 +79,10 @@ tt <- Ks %>%
 ## Fig 6a, KM plot for high-risk group patients
 ##############################################
 
+##* get data
+Ra_tb <- r_tb %>%
+  filter(sample %in% ssamples, roughness == "Ra") %>%
+  inner_join(pat.dat, by = c("sample" = "slide_id"))
 ## predict LOOV
 n <- nrow(Ra_tb)
 risk <- numeric(n)
