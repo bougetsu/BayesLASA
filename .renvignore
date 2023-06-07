@@ -1,0 +1,16 @@
+library/
+local/
+cellar/
+lock/
+python/
+sandbox/
+staging/
+manuscript_reproducibility/results/simulated_data/summary_statistics
+manuscript_reproducibility/results/simulated_data/Chull
+manuscript_reproducibility/results/simulated_data/BayesLASA
+manuscript_reproducibility/results/simulated_data/ALDUQ
+manuscript_reproducibility/results/real_data_pathology_images/summary_statistics
+BayesLASA/manuscript_reproducibility/results/simulated_data/summary_statistics
+data/
+*Rdata
+*csv
