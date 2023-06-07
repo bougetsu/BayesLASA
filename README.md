@@ -12,6 +12,7 @@ Bayesian Landmark-based Shape Analysis (BayesLASA) is a framework for landmark d
 * `demo`: Demo dataset for BayesLASA
 * `data`: The four datasets to which BayesLASA was applied in the BayesLASA manuscript
 * `manuscript_reproducibility`: Files to reproduce the analysis in the BayesLASA manuscript
+* `renv` and `renv.lock`: `renv` related files to make sure the reproducibility of R/R-lib environment.
 
 ## Usage
 Below, we demonstrate the usage of BayesLASA for landmark identification on the MPEG-7 dataset. The core landmark detection functionality is performed by the `MCMC_shape` function in `code/landmark_detection/MCMC_shape.cpp`.
