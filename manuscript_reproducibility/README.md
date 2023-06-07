@@ -27,6 +27,13 @@ Within each dataset folder in the main `results` folder, there may be several of
 
 ### Reproduce analysis
 
+The `renv` package was used to ensure the reproducibility of the environment. The users need to have `renv.lock` file in the repo root folder as well as the `.Rprofile` and `renv/activate.R` copied in their local environment. And then have the `renv` package installed and restore the entire R environement.
+
+```{r}
+install.package("renv")
+renv::restore()
+```
+
 To reproduce a figure or table in the manuscript, e.g., `Figure 3`, run `source("manuscript_reproducibility/scripts/figure_3.R")` from the repo root; the corresponding figure will be saved in `figures_and_tables`.
 
 Some scripts also contain the steps to run `BayesLASA` or `Convex hull` on a dataset for landmark identification. Since the MCMC process will take a while to complete, we provide ready-to-use results in the corresponding `BayesLASA` subfolder under each dataset folder.
