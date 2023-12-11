@@ -162,8 +162,8 @@ ggsave("demo/deer_application.png")
 ![BayesLASA applied to a complex shape (deer) from MPEG-7](demo/deer_application.png)
 
 ## Collaborators
-* Cong Zhang
-* Guanghua Xiao
-* Chul Moon
-* Min Chen
-* Qiwei Li
+* Cong Zhang (zhcong.pku@gmail.com)
+* Guanghua Xiao (guanghua.xiao@utsouthwestern.edu)
+* Chul Moon (chulm@smu.edu)
+* Min Chen (mchen@utdallas.edu)
+* Qiwei Li (Qiwei.Li@UTDallas.edu)
